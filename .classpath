@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Hanzhang/Documents/COMP3421/libraries/jogamp-all-platforms/jar/gluegen-rt.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/roger/libraries/gluegen/javadoc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Hanzhang/Documents/COMP3421/libraries/jogamp-all-platforms/jar/jogl-all.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/home/roger/libraries/jogl/javadoc_jogl_spec/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
