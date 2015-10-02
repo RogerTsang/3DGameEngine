@@ -131,9 +131,46 @@ public class Terrain {
      */
     public double altitude(double x, double z) {
         double altitude = 0;
-
-        
-        
+        // Depth Interpolation
+        int xCeil  = (int) Math.ceil(x);
+        int xFloor = (int) Math.floor(x);
+        int zCeil  = (int) Math.ceil(z);
+        int zFloor = (int) Math.floor(z);
+        double absX = (double) (xCeil - xFloor)*1.0;
+        double absZ = (double) (zCeil - zFloor)*1.0;
+        /*
+        (XFloor,0,ZFloor)  (XCeil,0.5,ZFloor)   
+				      +-----+  
+				      L o  R|  
+				      |  /  |
+				      |L  x R
+				      +-----+
+	    (XFloor,0,ZCeil)   (XCeil,0.3,ZCeil)
+	    
+	    * If X > 0.5, We will take the bottom-right triangle
+	    * Vice Versa
+     	*/
+        if (x == xFloor && z == zFloor) {
+        	altitude = myAltitude[xFloor][zFloor];
+        } else if (x - xFloor > 0.5) {
+        	// Find the altitude at R
+        	double altiR = ((z-zFloor)*myAltitude[xCeil][zCeil]+
+        				   (zCeil-z)*myAltitude[xCeil][zFloor])/absZ*1.0;
+        	// Find the altitude at L
+        	double altiL = ((z-zFloor)*myAltitude[xFloor][zCeil]+
+ 				   		   (zCeil-z)*myAltitude[xCeil][zFloor])/absZ*1.0;
+        	double xL = (xCeil - absX / absZ * (z - zFloor))* 1.0;
+        	altitude = ((x - xL)*altiR + (xCeil - x)*altiL)/absX*1.0;
+        } else {
+        	// Find the altitude at R
+        	double altiR = ((z-zFloor)*myAltitude[xFloor][zCeil]+
+        				   (zCeil-z)*myAltitude[xCeil][zFloor])/absZ*1.0;
+        	// Find the altitude at L
+        	double altiL = ((z-zFloor)*myAltitude[xFloor][zCeil]+
+ 				   		   (zCeil-z)*myAltitude[xFloor][zFloor])/absZ*1.0;
+        	double xR = (xFloor + absX / absZ * (zCeil - z))* 1.0;
+        	altitude = ((x - xFloor)*altiR + (xR - x)*altiL)/absX*1.0;
+        }
         return altitude;
     }
 
