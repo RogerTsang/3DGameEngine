@@ -152,7 +152,15 @@ public class Terrain {
      	*/
         if (x == xFloor && z == zFloor) {
         	altitude = myAltitude[xFloor][zFloor];
-        } else if (x - xFloor > 0.5) {
+        } else if (x == xFloor && z != zFloor) {
+        	// On the edge which paralleled to x
+        	altitude = ((z-zFloor)*myAltitude[xFloor][zCeil]+
+        				(zCeil-z)*myAltitude[xFloor][zFloor])/absZ*1.0;        	
+        } else if (z == zFloor && x != xFloor) {
+        	// On the edge which paralleled to z
+        	altitude = ((x-xFloor)*myAltitude[xCeil][zFloor]+
+    					(xCeil-x)*myAltitude[xFloor][zFloor])/absX*1.0;
+    	} else if (x - xFloor > 0.5) {
         	// Find the altitude at R
         	double altiR = ((z-zFloor)*myAltitude[xCeil][zCeil]+
         				   (zCeil-z)*myAltitude[xCeil][zFloor])/absZ*1.0;
@@ -160,7 +168,7 @@ public class Terrain {
         	double altiL = ((z-zFloor)*myAltitude[xFloor][zCeil]+
  				   		   (zCeil-z)*myAltitude[xCeil][zFloor])/absZ*1.0;
         	double xL = (xCeil - absX / absZ * (z - zFloor))* 1.0;
-        	altitude = ((x - xL)*altiR + (xCeil - x)*altiL)/absX*1.0;
+        	altitude = ((x - xL)*altiR + (xCeil - x)*altiL)/(xCeil - xL)*1.0;
         } else {
         	// Find the altitude at R
         	double altiR = ((z-zFloor)*myAltitude[xFloor][zCeil]+
@@ -169,7 +177,7 @@ public class Terrain {
         	double altiL = ((z-zFloor)*myAltitude[xFloor][zCeil]+
  				   		   (zCeil-z)*myAltitude[xFloor][zFloor])/absZ*1.0;
         	double xR = (xFloor + absX / absZ * (zCeil - z))* 1.0;
-        	altitude = ((x - xFloor)*altiR + (xR - x)*altiL)/absX*1.0;
+        	altitude = ((x - xFloor)*altiR + (xR - x)*altiL)/(xR - xFloor)*1.0;
         }
         return altitude;
     }
