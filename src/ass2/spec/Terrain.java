@@ -181,6 +181,10 @@ public class Terrain {
         }
         return altitude;
     }
+    
+    public void display(GL2 gl) {
+    	
+    }
 
     /**
      * Add a tree at the specified (x,z) point. 

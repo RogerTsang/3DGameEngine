@@ -24,11 +24,12 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Game extends JFrame implements GLEventListener{
 
     private Terrain myTerrain;
+    //private Camera myCamera;
 
     public Game(Terrain terrain) {
     	super("Assignment 2");
         myTerrain = terrain;
-   
+        //myCamera = new Camera();
     }
     
     /** 
@@ -69,21 +70,21 @@ public class Game extends JFrame implements GLEventListener{
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
-		gl.glMatrixMode(GL2.GL_MODELVIEW);
-    	gl.glLoadIdentity();
-    	
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+
+        // set the view matrix based on the camera position
+        //myCamera.setView(gl); 
+        
     	gl.glBegin(GL2.GL_TRIANGLES);
-    	
     	// Triangle Test
     	{    
     		//red triangle at front
     	    gl.glColor3f(1f,0f,0f);
     	    //CCW ordering of vertices
-    	    double p0[] = {1,0,-2}; 
-    	    double p1[] = {0,1,-2};
-    	    double p2[] = {-1,0,-2};
+    	    double p0[] = {0,2,1}; 
+    	    double p1[] = {0,3,0};
+    	    double p2[] = {1,2,0};
     	    //Can pass in an array and an offset into the array
+    	    
     	    gl.glVertex3dv(p0,0);
     	    gl.glVertex3dv(p1,0);
     	    gl.glVertex3dv(p2,0);
@@ -106,18 +107,17 @@ public class Game extends JFrame implements GLEventListener{
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-		// TODO Auto-generated method stub
-		GL2 gl = drawable.getGL().getGL2();
+		// tell the camera and the mouse that the screen has reshaped
+        GL2 gl = drawable.getGL().getGL2();
+        //myCamera.reshape(gl, x, y, width, height);
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();  
         
         //You can use an orthographic camera
+        gl.glOrtho(-5, 5, -5, 5, 1, 20);
         GLU glu = new GLU();
-        
-        glu.gluPerspective(60,1,1,20);
-        //gl.glFrustum(-0.6,0.6,-0.6,0.6,1,20);
-        //glu.gluPerspective(120,1,1,20);
-       // gl.glFrustum(-2,2,-2,2,1,20);
-
+        double centerX = myTerrain.size().getWidth()/2.0;
+        double centerZ = myTerrain.size().getHeight()/2.0;
+        glu.gluLookAt(0.0, 5.0, 0.0, centerX, 0.0, centerZ, 0, 0, -1);
 	}
 }
