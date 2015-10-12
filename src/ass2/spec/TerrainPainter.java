@@ -6,9 +6,11 @@ import javax.media.opengl.GL2;
 
 public class TerrainPainter {
 	private ArrayList<TerrianSection> ts;
-	
+	private double maxAl;
 	public TerrainPainter(Terrain t) {
+		
 		ts = new ArrayList<TerrianSection>();
+		maxAl = t.getMaxAltitude();
 		read(t);
 	}
 	
@@ -31,8 +33,8 @@ public class TerrainPainter {
 				double[] p1 = {x, h1, z};
 				double[] p2 = {x, h2, z+1};
 				double[] p3 = {x+1, h3, z+1};
-				ts.add(new TerrianSection(p0, p1, p2, h0, h1, h2));
-				ts.add(new TerrianSection(p0, p2, p3, h0, h2, h3));
+				ts.add(new TerrianSection(p0, p1, p2, h0, h1, h2, maxAl));
+				ts.add(new TerrianSection(p0, p2, p3, h0, h2, h3, maxAl));
 			}
 		}
 	}

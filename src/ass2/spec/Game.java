@@ -103,9 +103,16 @@ public class Game extends JFrame implements GLEventListener{
         gl.glLoadIdentity();  
         
         //You can use an orthographic camera
-        gl.glOrtho(-5, 5, -5, 5, 1, 20);
-
+        // gl.glOrtho(-5, 5, -5, 5, 1, 20);
+        gl.glFrustum(-5, 5, -5, 5, 2, 5);
+        
         GLU glu = new GLU();
-        glu.gluLookAt(2.0, 5.0, 2.0, 2.0, 0.0, 2.0, 0, 0, -1);
+        double eyeX = myTerrain.size().getWidth()/2;
+        double eyeY = myTerrain.getMaxAltitude()*2;
+        double eyeZ = myTerrain.size().getHeight()/2;
+        double centreX = eyeX;
+        double centreY = myTerrain.getMaxAltitude()/2;
+        double centreZ = eyeZ;
+        glu.gluLookAt(eyeX, eyeY, eyeZ, centreX, centreY, centreZ, 0, 0, -1);
 	}
 }

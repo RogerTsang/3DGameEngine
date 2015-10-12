@@ -29,6 +29,7 @@ public class Terrain {
     private List<Tree> myTrees;
     private List<Road> myRoads;
     private float[] mySunlight;
+    private double maxAltitude;
 
     /**
      * Create a new terrain
@@ -42,6 +43,7 @@ public class Terrain {
         myTrees = new ArrayList<Tree>();
         myRoads = new ArrayList<Road>();
         mySunlight = new float[3];
+        maxAltitude = 0;
     }
     
     public Terrain(Dimension size) {
@@ -62,6 +64,10 @@ public class Terrain {
 
     public float[] getSunlight() {
         return mySunlight;
+    }
+    
+    public double getMaxAltitude() {
+    	return maxAltitude;
     }
 
     /**
@@ -117,6 +123,8 @@ public class Terrain {
      */
     public void setGridAltitude(int x, int z, double h) {
         myAltitude[x][z] = h;
+        // Catch the maxAltitude
+        maxAltitude = maxAltitude < h ? h : maxAltitude;
     }
 
     /**
