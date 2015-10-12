@@ -24,11 +24,14 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Game extends JFrame implements GLEventListener{
 
     private Terrain myTerrain;
+    private TerrainPainter myTerrainPainter;
     //private Camera myCamera;
 
     public Game(Terrain terrain) {
     	super("Assignment 2");
+    	
         myTerrain = terrain;
+        myTerrainPainter = new TerrainPainter(myTerrain);
         //myCamera = new Camera();
     }
     
@@ -74,22 +77,8 @@ public class Game extends JFrame implements GLEventListener{
         // set the view matrix based on the camera position
         //myCamera.setView(gl); 
         
-    	gl.glBegin(GL2.GL_TRIANGLES);
-    	// Triangle Test
-    	{    
-    		//red triangle at front
-    	    gl.glColor3f(1f,0f,0f);
-    	    //CCW ordering of vertices
-    	    double p0[] = {0,2,1}; 
-    	    double p1[] = {0,3,0};
-    	    double p2[] = {1,2,0};
-    	    //Can pass in an array and an offset into the array
-    	    
-    	    gl.glVertex3dv(p0,0);
-    	    gl.glVertex3dv(p1,0);
-    	    gl.glVertex3dv(p2,0);
-    	}
-    	gl.glEnd();
+		//Drawing Terrain
+		myTerrainPainter.draw(gl);
 	}
 
 	@Override
@@ -115,9 +104,8 @@ public class Game extends JFrame implements GLEventListener{
         
         //You can use an orthographic camera
         gl.glOrtho(-5, 5, -5, 5, 1, 20);
+
         GLU glu = new GLU();
-        double centerX = myTerrain.size().getWidth()/2.0;
-        double centerZ = myTerrain.size().getHeight()/2.0;
-        glu.gluLookAt(0.0, 5.0, 0.0, centerX, 0.0, centerZ, 0, 0, -1);
+        glu.gluLookAt(2.0, 5.0, 2.0, 2.0, 0.0, 2.0, 0, 0, -1);
 	}
 }
