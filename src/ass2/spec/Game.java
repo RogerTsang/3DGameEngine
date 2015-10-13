@@ -25,14 +25,24 @@ public class Game extends JFrame implements GLEventListener{
 
     private Terrain myTerrain;
     private TerrainPainter myTerrainPainter;
-    //private Camera myCamera;
+    private Camera myCamera;
+    
 
     public Game(Terrain terrain) {
     	super("Assignment 2");
     	
         myTerrain = terrain;
         myTerrainPainter = new TerrainPainter(myTerrain);
-        //myCamera = new Camera();
+        
+        // Create a camera
+        double eyeX = myTerrain.size().getWidth()/2;
+        double eyeY = myTerrain.getMaxAltitude()*2;
+        double eyeZ = myTerrain.size().getHeight()/2;
+        double centreX = eyeX;
+        double centreY = myTerrain.getMaxAltitude()/2;
+        double centreZ = eyeZ;
+        myCamera = new Camera(eyeX, eyeY, eyeZ, centreX, centreY, centreZ);
+        
     }
     
     /** 
@@ -44,6 +54,9 @@ public class Game extends JFrame implements GLEventListener{
           GLCapabilities caps = new GLCapabilities(glp);
           GLJPanel panel = new GLJPanel();
           panel.addGLEventListener(this);
+          
+          // Add Keyboard Event Listener
+          panel.addKeyListener(myCamera);
  
           // Add an animator to call 'display' at 60fps        
           FPSAnimator animator = new FPSAnimator(60);
@@ -75,7 +88,7 @@ public class Game extends JFrame implements GLEventListener{
 		GL2 gl = drawable.getGL().getGL2();
 
         // set the view matrix based on the camera position
-        //myCamera.setView(gl); 
+        myCamera.setView(gl); 
         
 		//Drawing Terrain
 		myTerrainPainter.draw(gl);
@@ -98,21 +111,6 @@ public class Game extends JFrame implements GLEventListener{
 			int height) {
 		// tell the camera and the mouse that the screen has reshaped
         GL2 gl = drawable.getGL().getGL2();
-        //myCamera.reshape(gl, x, y, width, height);
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();  
-        
-        //You can use an orthographic camera
-        // gl.glOrtho(-5, 5, -5, 5, 1, 20);
-        gl.glFrustum(-5, 5, -5, 5, 2, 5);
-        
-        GLU glu = new GLU();
-        double eyeX = myTerrain.size().getWidth()/2;
-        double eyeY = myTerrain.getMaxAltitude()*2;
-        double eyeZ = myTerrain.size().getHeight()/2;
-        double centreX = eyeX;
-        double centreY = myTerrain.getMaxAltitude()/2;
-        double centreZ = eyeZ;
-        glu.gluLookAt(eyeX, eyeY, eyeZ, centreX, centreY, centreZ, 0, 0, -1);
+        myCamera.reshape(gl, x, y, width, height);
 	}
 }
