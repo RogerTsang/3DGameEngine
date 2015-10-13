@@ -41,7 +41,7 @@ public class Game extends JFrame implements GLEventListener{
         double centreX = eyeX;
         double centreY = myTerrain.getMaxAltitude()/2;
         double centreZ = eyeZ;
-        myCamera = new Camera(eyeX, eyeY, eyeZ, centreX, centreY, centreZ);
+        myCamera = new Camera(myTerrain);
         
     }
     

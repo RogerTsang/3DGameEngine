@@ -69,7 +69,14 @@ public class Terrain {
     public double getMaxAltitude() {
     	return maxAltitude;
     }
-
+    
+    public double[] getCentre() {
+    	double centreX = mySize.getWidth()/2.0;
+    	double centreZ = mySize.getHeight()/2.0;
+    	double centreY = altitude(centreX, centreZ);
+    	double[] centre = {centreX, centreY, centreZ};
+    	return centre;
+    }
     /**
      * Set the sunlight direction. 
      * 

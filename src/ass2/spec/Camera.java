@@ -19,12 +19,16 @@ import javax.media.opengl.glu.GLU;
 public class Camera implements KeyListener {
 	
 	private static final double NEAR = 1;
-	private static final double FAR = 8;
-
-	private float[] myBackground = new float[4];
+	private static final double FAR = 10;
+	private static final double SPEED = 0.1;
+	private static final double CAMERA_HEIGHT = 2;
+	
+	private Terrain map;
+	
 	private double positionX, positionY, positionZ;
+	private double stepX, stepY, stepZ;
 	private double lookatX, lookatY, lookatZ;
-	private double rotateX, rotateY, rotateZ;
+	private double rotateY, VAngle;
 	
 	// Default Frustum
     private double left, right, bottom, top;
@@ -34,34 +38,25 @@ public class Camera implements KeyListener {
 	 * Set up background colour
 	 * @param r
 	 */
-	public Camera(double eyeX, double eyeY, double eyeZ, double cX, double cY, double cZ) {
-		myBackground[0] = 0.0f;
-		myBackground[1] = 0.0f;
-		myBackground[2] = 0.0f;
-		myBackground[3] = 1.0f;
-		positionX = eyeX;
-		positionY = eyeY;
-		positionZ = eyeZ;
-		lookatX = cX;
-		lookatY = cY;
-		lookatZ = cZ;
+	public Camera(Terrain t) {
+		map = t;
+		
+		double eye[] = t.getCentre();
+		positionX = eye[0];
+		positionY = eye[1] + CAMERA_HEIGHT;
+		positionZ = eye[2];
+		
+		// Looking at positive X direction
+		updateStep();
+		updateLookAt();
 		
 		left = -3;
 		right = 3;
 		bottom = -4;
 		top = 4;
 		
-		rotateX = 0;
 		rotateY = 0;
-		rotateZ = 0;
-	}
-
-	public float[] getBackground() {
-		return myBackground;
-	}
-
-	public void setBackground(float[] background) {
-		myBackground = background;
+		VAngle = 0; //Vertical Angle
 	}
 	
 	public double[] getEyePos() {
@@ -86,8 +81,35 @@ public class Camera implements KeyListener {
 		lookatZ = cZ;
 	}
 	
-	public void rotate() {
-		
+	public void rotateHorizontal(double amount) {
+		rotateY += amount;
+		rotateY = MathUtil.normaliseAngle(rotateY);
+	}
+	
+	public void rotateVertical(double amount) {
+		VAngle += amount;
+		if (VAngle > 90) {
+			VAngle = 90;
+		} else if (VAngle < -90) {
+			VAngle = -90;
+		}
+	}
+	
+	public void updateStep() {
+		stepX = Math.cos(rotateY*1.0/2.0/Math.PI);
+		stepY = Math.sin(VAngle*1.0/2.0/Math.PI);
+		stepZ = -Math.sin(rotateY*1.0/2.0/Math.PI);
+		double[] step = {stepX, stepY, stepZ};
+		step = MathUtil.normalise(step);
+		stepX = SPEED * step[0];
+		stepY = SPEED * step[1];
+		stepZ = SPEED * step[2];
+	}
+	
+	public void updateLookAt() {
+		lookatX = positionX + stepX;
+		lookatY = positionY + stepY;
+		lookatZ = positionZ + stepZ;
 	}
 
 	// ===========================================
@@ -96,7 +118,7 @@ public class Camera implements KeyListener {
 
 	public void setView(GL2 gl) {
 		// clear the window
-		gl.glClearColor(myBackground[0], myBackground[1], myBackground[2], myBackground[3]);
+		gl.glClearColor(0,0,0,1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		
 		// match the projection aspect ratio to the viewport
@@ -104,15 +126,13 @@ public class Camera implements KeyListener {
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
         
-        gl.glRotated(rotateX, 1, 0, 0);
         gl.glRotated(rotateY, 0, 1, 0);
-        gl.glRotated(rotateZ, 0, 0, 1);
         
         //You can use an orthographic camera
-        gl.glFrustum(left, right, bottom, top, NEAR, FAR);
+        gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
         
 		GLU glu = new GLU();
-        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 0, -1);
+        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
 	}
     
 	public void reshape(GL2 gl, int x, int y, int width, int height) {
@@ -137,63 +157,53 @@ public class Camera implements KeyListener {
         }   
         
         //You can use an orthographic camera
-        gl.glFrustum(left, right, bottom, top, NEAR, FAR);
+        gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
         
 		GLU glu = new GLU();
-        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 0, -1); 
+        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0); 
     }
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
         case KeyEvent.VK_W:
-            positionY -= 0.1;
+            positionX += stepX;
+            positionY += stepY;
+            positionZ += stepZ;
             break;
 
         case KeyEvent.VK_S:
-            positionY += 0.1;
+        	positionX -= stepX;
+        	positionY -= stepY;
+            positionZ -= stepZ;
+            break;
+
+        case KeyEvent.VK_LEFT:
+        	rotateHorizontal(0.5);
+            break;
+        
+        case KeyEvent.VK_RIGHT:
+        	rotateHorizontal(-0.5);
             break;
             
         case KeyEvent.VK_UP:
-            positionZ -= 0.1;
-            break;
-
+        	rotateVertical(0.5);
+        	break;
+        	
         case KeyEvent.VK_DOWN:
-            positionZ += 0.1;
-            break;
+        	rotateVertical(-0.5);
+        	break;
             
-        case KeyEvent.VK_LEFT:
-            positionX -= 0.1;
-            break;
-
-        case KeyEvent.VK_RIGHT:
-            positionX += 0.1;
-            break;
-            
-        case KeyEvent.VK_Q:
-        	rotateX += 10;
-            break;
-        
-        case KeyEvent.VK_E:
-        	rotateX -= 10;
-            break;
-            
-        case KeyEvent.VK_D:
-        	rotateY += 10;
-            break;
-        
-        case KeyEvent.VK_A:
-        	rotateY -= 10;
-            break;
-            
-        case KeyEvent.VK_Z:
-        	rotateZ += 10;
-            break;
-        
-        case KeyEvent.VK_C:
-        	rotateZ -= 10;
-            break;
-		} 
+        case KeyEvent.VK_SPACE:
+        	positionY += 0.1;
+        	break;
+        	
+        case KeyEvent.VK_CONTROL:
+        	positionY -= 0.1;
+        	break;
+		}
+		updateStep();
+		updateLookAt();
 	}
 
 	@Override
