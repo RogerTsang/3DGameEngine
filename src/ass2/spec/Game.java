@@ -109,16 +109,13 @@ public class Game extends JFrame implements GLEventListener{
 		gl.glEnable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_LIGHT0);
 		
-		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_CONSTANT_ATTENUATION, 4F);
-		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_LINEAR_ATTENUATION, 2F);
-		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_QUADRATIC_ATTENUATION, 0.5F);
-		
-		float[] pos = myTerrain.getSunlight();
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos, 0);
+		float[] pos1 = myTerrain.getSunlight();
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos1, 0);
 		float[] spe = {0.0f, 0.0f, 0.0f, 1.0f};
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, spe,0);
 		float[] dif = {1.0f, 1.0f, 1.0f, 1.0f};
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, dif,0);
+        
 	}
 
 	@Override
