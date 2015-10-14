@@ -112,13 +112,9 @@ public class Camera implements KeyListener {
 		lookatZ = positionZ + stepZ;
 	}
 
-	// ===========================================
-	// COMPLETE THE METHODS BELOW
-	// ===========================================
-
 	public void setView(GL2 gl) {
 		// clear the window
-		gl.glClearColor(0,0,0,1);
+		gl.glClearColor(0,0,0.2f,1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		
 		// match the projection aspect ratio to the viewport
@@ -126,7 +122,8 @@ public class Camera implements KeyListener {
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
         
-        gl.glRotated(rotateY, 0, 1, 0);
+        // Torch not working yet
+
         
         //You can use an orthographic camera
         gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
