@@ -6,10 +6,13 @@ import javax.media.opengl.GL2;
 
 public class TerrainPainter {
 	private ArrayList<TerrianSection> ts;
+	private ArrayList<TreeSection> treeSections;
 	private double maxAl;
 	public TerrainPainter(Terrain t) {
 		
 		ts = new ArrayList<TerrianSection>();
+		treeSections = new ArrayList<TreeSection>();
+		
 		maxAl = t.getMaxAltitude();
 		read(t);
 	}
@@ -17,6 +20,9 @@ public class TerrainPainter {
 	public void draw(GL2 gl) {
 		for (TerrianSection ets: ts) {
 			ets.draw(gl);
+		}
+		for (TreeSection currentTree: treeSections) {
+			currentTree.draw(gl);
 		}
 	}
 	
@@ -37,7 +43,9 @@ public class TerrainPainter {
 				ts.add(new TerrianSection(p0, p2, p3, h0, h2, h3, maxAl));
 			}
 		}
+		//Add reading the trees from terrain
+		for (Tree currentTree: t.trees()) {
+			treeSections.add(new TreeSection(currentTree.getPosition()));
+		}
 	}
-    
-    
 }
