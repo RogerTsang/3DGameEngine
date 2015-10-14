@@ -31,8 +31,7 @@ public class Camera implements KeyListener {
 	private double rotateY, VAngle;
 	
 	// Default Frustum
-    private double left, right, bottom, top;
-    
+	private double aspect;
 
 	/**
 	 * Set up background colour
@@ -50,10 +49,7 @@ public class Camera implements KeyListener {
 		updateStep();
 		updateLookAt();
 		
-		left = -3;
-		right = 3;
-		bottom = -4;
-		top = 4;
+		aspect = 4.0/3.0;
 		
 		rotateY = 0;
 		VAngle = 0; //Vertical Angle
@@ -124,12 +120,8 @@ public class Camera implements KeyListener {
         
         // Torch not working yet
 
-        
-        //You can use an orthographic camera
-        gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
-        
-		GLU glu = new GLU();
-        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
+        setCamera(gl);
+		
 	}
     
 	public void reshape(GL2 gl, int x, int y, int width, int height) {
@@ -138,27 +130,18 @@ public class Camera implements KeyListener {
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();  
         
-        if (width > height) {
-            double aspect = (1.0 * width) / height;
-            top = 1.0;
-            bottom = -1.0;
-            left = -aspect;
-            right = aspect;            
-        }
-        else {
-            double aspect = (1.0 * height) / width;
-            top = aspect;
-            bottom = -aspect;
-            left = -1;
-            right = 1;                        
-        }   
-        
-        //You can use an orthographic camera
-        gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
-        
-		GLU glu = new GLU();
-        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0); 
+        aspect = width / height * 1.0;
+        		
+        setCamera(gl);
     }
+	
+	private void setCamera(GL2 gl) {
+		// You can use an orthographic camera
+	    // gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
+		GLU glu = new GLU();
+		glu.gluPerspective(60, aspect, NEAR, FAR);
+        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
