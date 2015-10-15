@@ -8,8 +8,8 @@ public class TerrainPainter {
 	private ArrayList<TerrianSection> ts;
 	private ArrayList<TreeSection> treeSections;
 	private double maxAl;
+	
 	public TerrainPainter(Terrain t) {
-		
 		ts = new ArrayList<TerrianSection>();
 		treeSections = new ArrayList<TreeSection>();
 		
@@ -18,6 +18,8 @@ public class TerrainPainter {
 	}
 	
 	public void draw(GL2 gl) {
+		//Use the texture we created from the framebuffer
+        
 		for (TerrianSection ets: ts) {
 			ets.draw(gl);
 		}

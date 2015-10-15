@@ -30,19 +30,9 @@ public class TerrianSection {
 			drawMaterial(gl);
 
 			// Set up surface
-			drawSurface(gl, false);
+			drawSurface(gl, false, true);
 		}
 		gl.glEnd();
-
-		// Test the Color if it is null
-		// Draw upper layer outline
-		/*
-		 * gl.glBegin(GL2.GL_LINE_STRIP); { gl.glColor4f(1.0f, 0.0f, 0.0f,
-		 * 1.0f); gl.glVertex3dv(p0, 0); gl.glVertex3dv(p1, 0);
-		 * gl.glVertex3dv(p2, 0); }
-		 * 
-		 * gl.glEnd();
-		 */
 	}
 	
 	public void drawMaterial(GL2 gl) {
@@ -50,18 +40,42 @@ public class TerrianSection {
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
 	}
 	
-	public void drawSurface(GL2 gl, boolean colour) {
+	public void drawSurface(GL2 gl, boolean colour, boolean texture) {
+		int textureWidth = 0;
+		int textureHeight = 0;
+		if (texture) {
+			TextureMgr.instance.activate(gl, "Grass");
+			textureWidth = TextureMgr.instance.getWidth();
+			textureHeight = TextureMgr.instance.getHeight();
+		}
+		
 		gl.glNormal3dv(normal, 0);
+		
 		if (colour) {
 			gl.glColor4d(c0, c0, c0, 1);
+		} else if (texture) { // Testing Only
+			double w = p0[0] / textureWidth * 10; //Test only, 10 should be the width of terrain
+			double h = p0[2] / textureHeight * 10;
+			gl.glTexCoord2d(w, h);
 		}
 		gl.glVertex3dv(p0, 0);
+		
 		if (colour) {
 			gl.glColor4d(c1, c1, c1, 1);
+		} else if (texture) {
+			double w = p1[0] / textureWidth * 10;
+			double h = p1[2] / textureHeight * 10;
+			gl.glTexCoord2d(w, h);
 		}
+		
 		gl.glVertex3dv(p1, 0);
+		
 		if (colour) {
 			gl.glColor4d(c2, c2, c2, 1);
+		} else if (texture) {
+			double w = p2[0] / textureWidth * 10;
+			double h = p2[2] / textureHeight * 10;
+			gl.glTexCoord2d(w, h);
 		}
 		gl.glVertex3dv(p2, 0);
 	}

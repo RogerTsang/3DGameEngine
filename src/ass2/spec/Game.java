@@ -26,7 +26,7 @@ public class Game extends JFrame implements GLEventListener{
     private Terrain myTerrain;
     private TerrainPainter myTerrainPainter;
     private Camera myCamera;
-    
+    private Texture grass;
 
     public Game(Terrain terrain) {
     	super("Assignment 2");
@@ -35,12 +35,6 @@ public class Game extends JFrame implements GLEventListener{
         myTerrainPainter = new TerrainPainter(myTerrain);
         
         // Create a camera
-        double eyeX = myTerrain.size().getWidth()/2;
-        double eyeY = myTerrain.getMaxAltitude()*2;
-        double eyeZ = myTerrain.size().getHeight()/2;
-        double centreX = eyeX;
-        double centreY = myTerrain.getMaxAltitude()/2;
-        double centreZ = eyeZ;
         myCamera = new Camera(myTerrain);
         
     }
@@ -103,7 +97,15 @@ public class Game extends JFrame implements GLEventListener{
 	@Override
 	public void init(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
+		
+		// Enable depth test
 		gl.glEnable(GL2.GL_DEPTH_TEST);
+		
+		// Enable texture
+		gl.glEnable(GL2.GL_TEXTURE_2D);
+		// Import grass texture
+		grass = new Texture(gl, "res/grass.png");
+		TextureMgr.instance.add(grass, "Grass"); // Add the grass texture to the bank
 		
 		// Light0: Sun
 		gl.glEnable(GL2.GL_LIGHTING);
