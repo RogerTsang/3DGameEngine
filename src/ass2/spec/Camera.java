@@ -93,9 +93,9 @@ public class Camera implements KeyListener {
 	}
 	
 	public void updateStep() {
-		stepX = Math.cos(rotateY*1.0/2.0/Math.PI);
-		stepY = Math.sin(VAngle*1.0/2.0/Math.PI);
-		stepZ = -Math.sin(rotateY*1.0/2.0/Math.PI);
+		stepX = Math.cos(rotateY/180*Math.PI);
+		stepY = Math.sin(VAngle/180*Math.PI);
+		stepZ = -Math.sin(rotateY/180*Math.PI);
 		
 		double[] up = {0, 1, 0};
     	double[] aim = {stepX, stepY, stepZ};
@@ -182,19 +182,19 @@ public class Camera implements KeyListener {
         	break;
 
         case KeyEvent.VK_LEFT:
-        	rotateHorizontal(0.5);
+        	rotateHorizontal(5);
             break;
         
         case KeyEvent.VK_RIGHT:
-        	rotateHorizontal(-0.5);
+        	rotateHorizontal(-5);
             break;
             
         case KeyEvent.VK_UP:
-        	rotateVertical(0.5);
+        	rotateVertical(5);
         	break;
         	
         case KeyEvent.VK_DOWN:
-        	rotateVertical(-0.5);
+        	rotateVertical(-5);
         	break;
             
         case KeyEvent.VK_SPACE:
