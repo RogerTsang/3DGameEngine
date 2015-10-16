@@ -18,15 +18,16 @@ import javax.media.opengl.glu.GLU;
  */
 public class Camera implements KeyListener {
 	
-	private static final double NEAR = 1;
+	private static final double NEAR = 0.1;
 	private static final double FAR = 10;
 	private static final double SPEED = 0.1;
-	private static final double CAMERA_HEIGHT = 2;
+	private static final double CAMERA_HEIGHT = 1;
+	private static final boolean FLIGHT = false;
 	
 	private Terrain map;
 	
 	private double positionX, positionY, positionZ;
-	private double stepX, stepY, stepZ;
+	private double stepX, stepY, stepZ, leftX, leftZ;
 	private double lookatX, lookatY, lookatZ;
 	private double rotateY, VAngle;
 	
@@ -92,14 +93,24 @@ public class Camera implements KeyListener {
 	}
 	
 	public void updateStep() {
-		stepX = Math.cos(rotateY*1.0/2.0/Math.PI);
-		stepY = Math.sin(VAngle*1.0/2.0/Math.PI);
-		stepZ = -Math.sin(rotateY*1.0/2.0/Math.PI);
+		stepX = Math.cos(rotateY/180*Math.PI);
+		stepY = Math.sin(VAngle/180*Math.PI);
+		stepZ = -Math.sin(rotateY/180*Math.PI);
+		
+		double[] up = {0, 1, 0};
+    	double[] aim = {stepX, stepY, stepZ};
+    	double[] left = MathUtil.cross(up, aim);
+    	
+    	left = MathUtil.normalise(left);
+    	leftX = left[0] * SPEED;
+    	leftZ = left[2] * SPEED;
+    	
 		double[] step = {stepX, stepY, stepZ};
 		step = MathUtil.normalise(step);
 		stepX = SPEED * step[0];
 		stepY = SPEED * step[1];
 		stepZ = SPEED * step[2];
+		
 	}
 	
 	public void updateLookAt() {
@@ -134,38 +145,68 @@ public class Camera implements KeyListener {
 		switch (e.getKeyCode()) {
         case KeyEvent.VK_W:
             positionX += stepX;
-            positionY += stepY;
             positionZ += stepZ;
+            if (FLIGHT) {            	
+            	positionY += stepY;
+            } else {
+            	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
+            }
             break;
 
         case KeyEvent.VK_S:
         	positionX -= stepX;
-        	positionY -= stepY;
             positionZ -= stepZ;
+            if (FLIGHT) {            	
+            	positionY -= stepY;
+            } else {
+            	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
+            }
             break;
+        
+        case KeyEvent.VK_A:
+        	
+        	positionX += leftX;
+        	positionZ += leftZ;
+        	if (!FLIGHT) {            	
+            	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
+            }
+        	break;
+        	
+        case KeyEvent.VK_D:
+        	
+        	positionX -= leftX;
+        	positionZ -= leftZ;
+        	if (!FLIGHT) {            	
+            	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
+            }
+        	break;
 
         case KeyEvent.VK_LEFT:
-        	rotateHorizontal(0.5);
+        	rotateHorizontal(5);
             break;
         
         case KeyEvent.VK_RIGHT:
-        	rotateHorizontal(-0.5);
+        	rotateHorizontal(-5);
             break;
             
         case KeyEvent.VK_UP:
-        	rotateVertical(0.5);
+        	rotateVertical(5);
         	break;
         	
         case KeyEvent.VK_DOWN:
-        	rotateVertical(-0.5);
+        	rotateVertical(-5);
         	break;
             
         case KeyEvent.VK_SPACE:
-        	positionY += 0.1;
+        	if (FLIGHT) {
+        		positionY += 0.1;
+        	}
         	break;
         	
         case KeyEvent.VK_CONTROL:
-        	positionY -= 0.1;
+        	if (FLIGHT) {
+        		positionY -= 0.1;
+        	}
         	break;
 		}
 		updateStep();
