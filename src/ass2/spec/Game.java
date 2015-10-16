@@ -27,6 +27,7 @@ public class Game extends JFrame implements GLEventListener{
     private TerrainPainter myTerrainPainter;
     private Camera myCamera;
     private Texture grass;
+    private Lights myLights;
 
     public Game(Terrain terrain) {
     	super("Assignment 2");
@@ -37,6 +38,7 @@ public class Game extends JFrame implements GLEventListener{
         // Create a camera
         myCamera = new Camera(myTerrain);
         
+        myLights = new Lights(myTerrain);
     }
     
     /** 
@@ -73,19 +75,25 @@ public class Game extends JFrame implements GLEventListener{
         Terrain terrain = LevelIO.load(new File(args[0]));
         Game game = new Game(terrain);
         game.run();
-        // Test altitude Function
-        // System.out.println(terrain.altitude(1, 0.9));
     }
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
-
-        // set the view matrix based on the camera position
-        myCamera.setView(gl); 
+		
+		// Default Matrix Mode should be GL2.GL_MODELVIEW
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glLoadIdentity();
         
-		//Drawing Terrain
+		// set the view matrix based on the camera position
+		myCamera.setView(gl); 
+		
+        //Lights rendering before Geometry
+        myLights.drawSun(gl);
+
+        //Drawing Terrain
 		myTerrainPainter.draw(gl);
+
 	}
 
 	@Override
@@ -108,23 +116,13 @@ public class Game extends JFrame implements GLEventListener{
 		TextureMgr.instance.add(grass, "Grass"); // Add the grass texture to the bank
 		
 		// Light0: Sun
-		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-		
-		float[] pos1 = myTerrain.getSunlight();
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos1, 0);
-		float[] spe = {0.0f, 0.0f, 0.0f, 1.0f};
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, spe,0);
-		float[] dif = {1.0f, 1.0f, 1.0f, 1.0f};
-        gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, dif,0);
-        
+		myLights.init(gl);
 	}
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-		// tell the camera and the mouse that the screen has reshaped
-        GL2 gl = drawable.getGL().getGL2();
-        myCamera.reshape(gl, x, y, width, height);
+		GL2 gl = drawable.getGL().getGL2();
+		myCamera.reshape(gl, x, y, width, height);
 	}
 }

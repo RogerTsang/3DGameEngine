@@ -23,6 +23,7 @@ public class TerrianSection {
 
 	public void draw(GL2 gl) {
 		// Draw lower layer triangles
+		gl.glPushMatrix();
 		gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
 		gl.glBegin(GL2.GL_TRIANGLES);
 		{
@@ -33,6 +34,7 @@ public class TerrianSection {
 			drawSurface(gl, false, true);
 		}
 		gl.glEnd();
+		gl.glPopMatrix();
 	}
 	
 	public void drawMaterial(GL2 gl) {

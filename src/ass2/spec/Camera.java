@@ -113,35 +113,21 @@ public class Camera implements KeyListener {
 		gl.glClearColor(0,0,0.2f,1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		
-		// match the projection aspect ratio to the viewport
-        // to avoid stretching
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();
-        
         // Torch not working yet
-
-        setCamera(gl);
-		
+		GLU glu = new GLU();
+        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
 	}
     
 	public void reshape(GL2 gl, int x, int y, int width, int height) {
-		// match the projection aspect ratio to the viewport
-        // to avoid stretching
         gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glLoadIdentity();  
+        gl.glLoadIdentity();
         
-        aspect = width / height * 1.0;
-        		
-        setCamera(gl);
+        GLU glu = new GLU();
+        glu.gluPerspective(60.0, (float)width/(float)height, NEAR, FAR);
+        
+        gl.glMatrixMode(GL2.GL_MODELVIEW);
+        gl.glLoadIdentity();
     }
-	
-	private void setCamera(GL2 gl) {
-		// You can use an orthographic camera
-	    // gl.glFrustum(-1, 1, -1, 1, NEAR, FAR);
-		GLU glu = new GLU();
-		glu.gluPerspective(60, aspect, NEAR, FAR);
-        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
-	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {

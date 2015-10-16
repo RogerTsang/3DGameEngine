@@ -68,7 +68,8 @@ public class Texture {
 		gl.glGenerateMipmap(GL2.GL_TEXTURE_2D); 
 		
 		// Specify how texture values combine with current surface color values.
-    	gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);     		
+		gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE); 
+    	//gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);     		
 	}
 	
 	public void release(GL2 gl) {
