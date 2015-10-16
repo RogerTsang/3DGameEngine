@@ -124,5 +124,8 @@ public class Game extends JFrame implements GLEventListener{
 			int height) {
 		GL2 gl = drawable.getGL().getGL2();
 		myCamera.reshape(gl, x, y, width, height);
+		
+		// Initialise Texture
+		TextureMgr.instance.add(new Texture(gl, "res/grass.png"), "Grass"); // Add the grass texture to the bank
 	}
 }
