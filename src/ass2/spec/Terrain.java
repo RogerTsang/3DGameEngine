@@ -146,6 +146,11 @@ public class Terrain {
      */
     public double altitude(double x, double z) {
         double altitude = 0;
+        
+        if (x < 0 || x > mySize.getWidth()-1 || z < 0 || z > mySize.getHeight()-1) {
+        	return 0;
+        }
+        
         // Depth Interpolation
         int xCeil  = (int) Math.ceil(x);
         int xFloor = (int) Math.floor(x);
