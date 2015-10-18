@@ -22,11 +22,8 @@ public class TerrainPainter {
 	}
 	
 	public void draw(GL2 gl) {
-		//Use the texture we created from the framebuffer
-        
 		for (TerrianSection ets: ts) {
-			ets.setTexture("Grass", terrainWidth, terrainHeight);
-			ets.draw(gl);
+			ets.draw(gl, true, terrainWidth, terrainHeight);
 		}
 		
 		for (TreeSection currentTree: treeSections) {
@@ -37,6 +34,7 @@ public class TerrainPainter {
 	public void read(Terrain t) {
 		int width = (int) t.size().getWidth();
 		int height = (int) t.size().getHeight();
+		// Calculate the each triangle position base on their (x,z) position
 		for (int x = 0; x < width-1; x++) {
 			for (int z = 0; z < height-1; z++) {
 				double h0 = t.getGridAltitude(x+1, z);
