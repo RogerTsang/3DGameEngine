@@ -146,8 +146,4 @@ public class Road {
         // this should never happen
         throw new IllegalArgumentException("" + i);
     }
-
-   public List<Double> points() {
-	   return myPoints;
-   }
 }

@@ -61,25 +61,7 @@ public class TerrainPainter {
 		}
 		//Add reading the roads from terrain
 		for (Road currentRoad: t.roads()) {
-			int completePointsSize = (int) ((double) currentRoad.point().size()*3/2);
-			double[] completePoints = new double[completePointsSize];
 			//Add each point from the currentRoad's points into the completePoints ArrayList, in x,z,y format where y is calculated.
-			double previousValue = 0;
-			int currentIndex = 0;
-			int i = 0;
-			/*for (Double currentValue: currentRoad.points()) {
-				if (currentIndex % 2 == 0) {
-					completePoints[i] = currentValue;
-					i++;
-					previousValue = currentValue;
-				} else {
-					completePoints[i] = currentValue;
-					i++;
-					completePoints[i] = t.altitude(previousValue, currentValue);
-					i++;
-				}
-				currentIndex++;
-			}*/
 			roadSections.add(new RoadSection(currentRoad, t));
 		}
 	}
