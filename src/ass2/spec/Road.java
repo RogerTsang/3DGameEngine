@@ -33,8 +33,9 @@ public class Road {
         myWidth = width;
         myPoints = new ArrayList<Double>();
         for (int i = 0; i < spine.length; i++) {
-            myPoints.add(spine[i]);
+            myPoints.add(spine[i]); //System.out.println(spine[i]);
         }
+        
     }
 
     /**
@@ -146,5 +147,7 @@ public class Road {
         throw new IllegalArgumentException("" + i);
     }
 
-
+   public List<Double> points() {
+	   return myPoints;
+   }
 }
