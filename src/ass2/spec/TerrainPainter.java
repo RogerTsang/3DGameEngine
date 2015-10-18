@@ -10,6 +10,8 @@ public class TerrainPainter {
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
 	private double maxAl;
+	private int terrainWidth;
+	private int terrainHeight;
 	
 	public TerrainPainter(Terrain t) {
 		ts = new ArrayList<TerrianSection>();
@@ -17,6 +19,8 @@ public class TerrainPainter {
 		roadSections = new ArrayList<RoadSection>();
 		
 		maxAl = t.getMaxAltitude();
+		terrainWidth = (int) t.size().getWidth();
+		terrainHeight = (int) t.size().getHeight();		
 		read(t);
 	}
 	
@@ -24,8 +28,10 @@ public class TerrainPainter {
 		//Use the texture we created from the framebuffer
         
 		for (TerrianSection ets: ts) {
+			ets.setTexture("Grass", terrainWidth, terrainHeight);
 			ets.draw(gl);
 		}
+		
 		for (TreeSection currentTree: treeSections) {
 			currentTree.draw(gl);
 		}
