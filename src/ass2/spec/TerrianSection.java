@@ -6,6 +6,13 @@ public class TerrianSection {
 	private double[] p0, p1, p2;
 	private double c0, c1, c2; // Altitude Test
 	private double[] normal; // So far, we use face normals
+	
+	// Texture Mapping
+	private boolean texture;
+	private int textureWidth;
+	private int textureHeight;
+	private int terrainWidth;
+	private int terrainHeight;
 
 	private static final float[] diffuseCoeff = { 0.2f, 0.6f, 0.0f, 1.0f };
 	private static final float[] specularCoeff = { 0.5f, 0.0f, 0.2f, 1.0f };
@@ -19,6 +26,19 @@ public class TerrianSection {
 		this.c2 = h2 * 1.0 / maxAl;
 		normal = MathUtil.getNormal(p0, p1, p2);
 		normal = MathUtil.normalise(normal);
+		textureWidth = 0;
+		textureHeight = 0;
+		terrainWidth = 0;
+		terrainHeight = 0;
+		texture = false;
+	}
+	
+	public void setTexture(String textureName, int terrainW, int terrainH) {
+		textureWidth = TextureMgr.instance.getWidth(textureName);
+		textureHeight = TextureMgr.instance.getHeight(textureName);
+		terrainWidth = terrainW;
+		terrainHeight = terrainH;
+		texture = true;
 	}
 
 	public void draw(GL2 gl) {
@@ -47,20 +67,14 @@ public class TerrianSection {
 	}
 	
 	public void drawSurface(GL2 gl, boolean colour, boolean texture) {
-		int textureWidth = 0;
-		int textureHeight = 0;
-		if (texture) {
-			textureWidth = TextureMgr.instance.getWidth();
-			textureHeight = TextureMgr.instance.getHeight();
-		}
 		
 		gl.glNormal3dv(normal, 0);
 		
 		if (colour) {
 			gl.glColor4d(c0, c0, c0, 1);
-		} else if (texture) { // Testing Only
-			double w = p0[0] / textureWidth * 10; //Test only, 10 should be the width of terrain
-			double h = p0[2] / textureHeight * 10;
+		} else if (texture) {
+			double w = p0[0] / textureWidth * terrainWidth;
+			double h = p0[2] / textureHeight * terrainHeight;
 			gl.glTexCoord2d(w, h);
 		}
 		gl.glVertex3dv(p0, 0);
@@ -68,8 +82,8 @@ public class TerrianSection {
 		if (colour) {
 			gl.glColor4d(c1, c1, c1, 1);
 		} else if (texture) {
-			double w = p1[0] / textureWidth * 10;
-			double h = p1[2] / textureHeight * 10;
+			double w = p1[0] / textureWidth * terrainWidth;
+			double h = p1[2] / textureHeight * terrainHeight;
 			gl.glTexCoord2d(w, h);
 		}
 		
@@ -78,8 +92,8 @@ public class TerrianSection {
 		if (colour) {
 			gl.glColor4d(c2, c2, c2, 1);
 		} else if (texture) {
-			double w = p2[0] / textureWidth * 10;
-			double h = p2[2] / textureHeight * 10;
+			double w = p2[0] / textureWidth * terrainWidth;
+			double h = p2[2] / textureHeight * terrainHeight;
 			gl.glTexCoord2d(w, h);
 		}
 		gl.glVertex3dv(p2, 0);

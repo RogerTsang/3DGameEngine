@@ -114,15 +114,7 @@ public class Game extends JFrame implements GLEventListener{
 		
 		// Enable texture
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		// Import grass texture
-		grass = new Texture(gl, "res/grass.png");
-		TextureMgr.instance.add(grass, "Grass"); // Add the grass texture to the bank
-		
-		treeBark = new Texture(gl, "res/treeBark.png");
-		TextureMgr.instance.add(treeBark, "TreeBark");
-		
-		treeLeaves = new Texture(gl, "res/treeLeaves.png");
-		TextureMgr.instance.add(treeLeaves, "TreeLeaves");
+		textureInit(gl);
 		
 		// Light0: Sun
 		myLights.init(gl);
@@ -134,8 +126,15 @@ public class Game extends JFrame implements GLEventListener{
 		GL2 gl = drawable.getGL().getGL2();
 		myCamera.reshape(gl, x, y, width, height);
 		
-		// Initialise Texture
-		TextureMgr.instance.add(new Texture(gl, "res/grass.png"), "Grass"); // Add the grass texture to the bank
+		// Link textures to the world again
+		textureInit(gl);
+	}
+	
+	private void textureInit(GL2 gl) {
+		// Create a new texture instance and link it to a file
+		grass = new Texture(gl, "res/grass.png");
+		// Link a texture to the texture manager (storage) 
+		TextureMgr.instance.add(grass, "Grass"); 
 		
 		treeBark = new Texture(gl, "res/treeBark.png");
 		TextureMgr.instance.add(treeBark, "TreeBark");
