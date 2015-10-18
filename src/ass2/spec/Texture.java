@@ -37,6 +37,7 @@ public class Texture {
 			//This library call flips all images the same way
 			data = AWTTextureIO.newTextureData(GLProfile.getDefault(), img, false);
 		} catch (IOException exc) {
+			System.err.println(fileName);
             exc.printStackTrace();
             System.exit(1);
         }

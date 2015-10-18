@@ -14,7 +14,6 @@ import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 
 import com.jogamp.opengl.util.FPSAnimator;
-import com.jogamp.opengl.util.texture.TextureData; //Remove later
 
 import java.util.ArrayList;
 
