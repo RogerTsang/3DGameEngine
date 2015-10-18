@@ -30,6 +30,7 @@ public class Game extends JFrame implements GLEventListener{
     private Texture grass;
     private Texture treeBark;
     private Texture treeLeaves;
+    private Texture road;
     private Lights myLights;
 
     public Game(Terrain terrain) {
@@ -124,6 +125,9 @@ public class Game extends JFrame implements GLEventListener{
 		treeLeaves = new Texture(gl, "res/treeLeaves.png");
 		TextureMgr.instance.add(treeLeaves, "TreeLeaves");
 		
+		road = new Texture(gl, "res/road.png");
+		TextureMgr.instance.add(road, "Road");
+		
 		// Light0: Sun
 		myLights.init(gl);
 	}
@@ -142,5 +146,8 @@ public class Game extends JFrame implements GLEventListener{
 		
 		treeLeaves = new Texture(gl, "res/treeLeaves.png");
 		TextureMgr.instance.add(treeLeaves, "TreeLeaves");
+		
+		road = new Texture(gl, "res/road.png");
+		TextureMgr.instance.add(road, "Road");
 	}
 }

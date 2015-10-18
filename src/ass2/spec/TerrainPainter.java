@@ -1,17 +1,20 @@
 package ass2.spec;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.media.opengl.GL2;
 
 public class TerrainPainter {
 	private ArrayList<TerrianSection> ts;
 	private ArrayList<TreeSection> treeSections;
+	private ArrayList<RoadSection> roadSections;
 	private double maxAl;
 	
 	public TerrainPainter(Terrain t) {
 		ts = new ArrayList<TerrianSection>();
 		treeSections = new ArrayList<TreeSection>();
+		roadSections = new ArrayList<RoadSection>();
 		
 		maxAl = t.getMaxAltitude();
 		read(t);
@@ -25,6 +28,9 @@ public class TerrainPainter {
 		}
 		for (TreeSection currentTree: treeSections) {
 			currentTree.draw(gl);
+		}
+		for (RoadSection currentRoad: roadSections) {
+			currentRoad.draw(gl);
 		}
 	}
 	
@@ -48,6 +54,29 @@ public class TerrainPainter {
 		//Add reading the trees from terrain
 		for (Tree currentTree: t.trees()) {
 			treeSections.add(new TreeSection(currentTree.getPosition()));
+		}
+		//Add reading the roads from terrain
+		for (Road currentRoad: t.roads()) {
+			int completePointsSize = (int) ((double) currentRoad.points().size()*3/2);
+			double[] completePoints = new double[completePointsSize];
+			//Add each point from the currentRoad's points into the completePoints ArrayList, in x,z,y format where y is calculated.
+			double previousValue = 0;
+			int currentIndex = 0;
+			int i = 0;
+			/*for (Double currentValue: currentRoad.points()) {
+				if (currentIndex % 2 == 0) {
+					completePoints[i] = currentValue;
+					i++;
+					previousValue = currentValue;
+				} else {
+					completePoints[i] = currentValue;
+					i++;
+					completePoints[i] = t.altitude(previousValue, currentValue);
+					i++;
+				}
+				currentIndex++;
+			}*/
+			roadSections.add(new RoadSection(currentRoad, t));
 		}
 	}
 }
