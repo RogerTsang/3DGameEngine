@@ -25,23 +25,31 @@ public class TreeSection {
 		double[] currentP2 = new double[3];
 		double[] currentP3 = new double[3];
 		
+		//Initialises the bark texture for the stump of the tree
+		TextureMgr.instance.activate(gl, "TreeBark");
+		
 		//Sets the material for the stump to be brown
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeffientStump, 0);
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeffientStump, 0);
 		//Draws the stump of the tree
 		for (int i = 0; i < numVertices; i++) {
 			currentP0[0] = treeRootPosition[0] + radius*Math.cos(i*increment); currentP0[1] = treeRootPosition[1]; currentP0[2] = treeRootPosition[2] + radius*Math.sin(i*increment);
-			currentP1[0] = treeRootPosition[0] + radius*Math.cos(i*increment); currentP1[1] = treeRootPosition[1] + 1; currentP1[2] = treeRootPosition[2] + radius*Math.sin(i*increment);
-			currentP2[0] = treeRootPosition[0] + radius*Math.cos((i+1)*increment); currentP2[1] = treeRootPosition[1] + 1; currentP2[2] = treeRootPosition[2] + radius*Math.sin((i+1)*increment);
+			currentP1[0] = treeRootPosition[0] + radius*Math.cos(i*increment); currentP1[1] = treeRootPosition[1] + 1.1; currentP1[2] = treeRootPosition[2] + radius*Math.sin(i*increment);
+			currentP2[0] = treeRootPosition[0] + radius*Math.cos((i+1)*increment); currentP2[1] = treeRootPosition[1] + 1.1; currentP2[2] = treeRootPosition[2] + radius*Math.sin((i+1)*increment);
 			currentP3[0] = treeRootPosition[0] + radius*Math.cos((i+1)*increment); currentP3[1] = treeRootPosition[1]; currentP3[2] = treeRootPosition[2] + radius*Math.sin((i+1)*increment);
 			currentNormal = MathUtil.getNormal(currentP0, currentP1, currentP2);
 			currentNormal = MathUtil.normalise(currentNormal);
 			
+			TextureMgr.instance.activate(gl, "TreeBark");
 			gl.glBegin(GL2.GL_POLYGON);
 			gl.glNormal3dv(currentNormal, 0);
+			gl.glTexCoord2d((double) i/numVertices,0);
 			gl.glVertex3d(treeRootPosition[0] + radius*Math.cos(i*increment), treeRootPosition[1], treeRootPosition[2] + radius*Math.sin(i*increment));
-			gl.glVertex3d(treeRootPosition[0] + radius*Math.cos(i*increment), treeRootPosition[1] + 1, treeRootPosition[2] + radius*Math.sin(i*increment));
-			gl.glVertex3d(treeRootPosition[0] + radius*Math.cos((i+1)*increment), treeRootPosition[1] + 1, treeRootPosition[2] + radius*Math.sin((i+1)*increment));
+			gl.glTexCoord2d((double) i/numVertices, 1);
+			gl.glVertex3d(treeRootPosition[0] + radius*Math.cos(i*increment), treeRootPosition[1] + 1.1, treeRootPosition[2] + radius*Math.sin(i*increment));
+			gl.glTexCoord2d((double) (i+1)/numVertices, 1);
+			gl.glVertex3d(treeRootPosition[0] + radius*Math.cos((i+1)*increment), treeRootPosition[1] + 1.1, treeRootPosition[2] + radius*Math.sin((i+1)*increment));
+			gl.glTexCoord2d((double) (i+1)/numVertices, 0);
 			gl.glVertex3d(treeRootPosition[0] + radius*Math.cos((i+1)*increment), treeRootPosition[1], treeRootPosition[2] + radius*Math.sin((i+1)*increment));
 			gl.glEnd();
 		}
@@ -82,11 +90,16 @@ public class TreeSection {
 				currentNormal = MathUtil.getNormal(currentP0, currentP2, currentP3);
 				currentNormal = MathUtil.normalise(currentNormal);
 				
+				TextureMgr.instance.activate(gl, "TreeLeaves");
 				gl.glBegin(GL2.GL_POLYGON);
 				gl.glNormal3dv(currentNormal, 0);
+				gl.glTexCoord2d((double) i/numVerticesSphere, (double) j/numVerticesSphere);
 				gl.glVertex3d(currentP0[0], currentP0[1], currentP0[2]);
+				gl.glTexCoord2d((double) i/numVerticesSphere, (double) (j+1)/numVerticesSphere);
 				gl.glVertex3d(currentP1[0], currentP1[1], currentP1[2]);
+				gl.glTexCoord2d((double) (i+1)/numVerticesSphere, (double) (j+1)/numVerticesSphere);
 				gl.glVertex3d(currentP2[0], currentP2[1], currentP2[2]);
+				gl.glTexCoord2d((double) (i+1)/numVerticesSphere, (double) j/numVerticesSphere);
 				gl.glVertex3d(currentP3[0], currentP3[1], currentP3[2]);
 				gl.glEnd();
 			}

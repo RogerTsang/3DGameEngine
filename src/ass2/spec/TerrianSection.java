@@ -25,6 +25,10 @@ public class TerrianSection {
 		// Draw lower layer triangles
 		gl.glPushMatrix();
 		gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+		
+		//Activate texture
+		TextureMgr.instance.activate(gl, "Grass");
+		
 		gl.glBegin(GL2.GL_TRIANGLES);
 		{
 			// Set up material
@@ -46,7 +50,6 @@ public class TerrianSection {
 		int textureWidth = 0;
 		int textureHeight = 0;
 		if (texture) {
-			TextureMgr.instance.activate(gl, "Grass");
 			textureWidth = TextureMgr.instance.getWidth();
 			textureHeight = TextureMgr.instance.getHeight();
 		}

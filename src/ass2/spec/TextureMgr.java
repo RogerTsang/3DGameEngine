@@ -7,13 +7,13 @@ import javax.media.opengl.GL2;
 public class TextureMgr {
 	
 	public static final TextureMgr instance = new TextureMgr();
-	private ArrayList<Texture> text;
-	private ArrayList<String> name;
+	private ArrayList<Texture> textures;
+	private ArrayList<String> names;
 	private int currentIndex;
 	
 	public TextureMgr() {
-		text = new ArrayList<Texture>();
-		name = new ArrayList<String>();
+		textures = new ArrayList<Texture>();
+		names = new ArrayList<String>();
 		currentIndex = -1;
 	}
 	
@@ -24,8 +24,8 @@ public class TextureMgr {
 	 * @param n Specific Name to be bound
 	 */
 	public void add(Texture t, String n) {
-		text.add(t);
-		name.add(n);
+		textures.add(t);
+		names.add(n);
 	}
 	
 	/**
@@ -34,8 +34,8 @@ public class TextureMgr {
 	 * @param name bound name
 	 */
 	public void activate(GL2 gl, String name) {
-		currentIndex = name.indexOf(name);
-		text.get(currentIndex).activate(gl);
+		currentIndex = names.indexOf(name);
+		textures.get(currentIndex).activate(gl);
 	}
 	
 	/**
@@ -43,24 +43,24 @@ public class TextureMgr {
 	 * @return
 	 */
 	public String getCurrentTexture() {
-		return name.get(currentIndex);
+		return names.get(currentIndex);
 	}
 	
 	public int getWidth(String name) {
-		currentIndex = name.indexOf(name);
-		return text.get(currentIndex).getWidth();
+		currentIndex = names.indexOf(name);
+		return textures.get(currentIndex).getWidth();
 	}
 	
 	public int getWidth() {
-		return text.get(currentIndex).getWidth();
+		return textures.get(currentIndex).getWidth();
 	}
 	
 	public int getHeight(String name) {
 		currentIndex = name.indexOf(name);
-		return text.get(currentIndex).getHeight();
+		return textures.get(currentIndex).getHeight();
 	}
 	
 	public int getHeight() {
-		return text.get(currentIndex).getHeight();
+		return textures.get(currentIndex).getHeight();
 	}
 }

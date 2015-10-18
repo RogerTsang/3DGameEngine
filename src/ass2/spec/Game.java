@@ -12,9 +12,11 @@ import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
 import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
+
 import com.jogamp.opengl.util.FPSAnimator;
+import com.jogamp.opengl.util.texture.TextureData; //Remove later
 
-
+import java.util.ArrayList;
 
 /**
  * COMMENT: Comment Game 
@@ -27,6 +29,8 @@ public class Game extends JFrame implements GLEventListener{
     private TerrainPainter myTerrainPainter;
     private Camera myCamera;
     private Texture grass;
+    private Texture treeBark;
+    private Texture treeLeaves;
     private Lights myLights;
 
     public Game(Terrain terrain) {
@@ -115,6 +119,12 @@ public class Game extends JFrame implements GLEventListener{
 		grass = new Texture(gl, "res/grass.png");
 		TextureMgr.instance.add(grass, "Grass"); // Add the grass texture to the bank
 		
+		treeBark = new Texture(gl, "res/treeBark.png");
+		TextureMgr.instance.add(treeBark, "TreeBark");
+		
+		treeLeaves = new Texture(gl, "res/treeLeaves.png");
+		TextureMgr.instance.add(treeLeaves, "TreeLeaves");
+		
 		// Light0: Sun
 		myLights.init(gl);
 	}
@@ -127,5 +137,11 @@ public class Game extends JFrame implements GLEventListener{
 		
 		// Initialise Texture
 		TextureMgr.instance.add(new Texture(gl, "res/grass.png"), "Grass"); // Add the grass texture to the bank
+		
+		treeBark = new Texture(gl, "res/treeBark.png");
+		TextureMgr.instance.add(treeBark, "TreeBark");
+		
+		treeLeaves = new Texture(gl, "res/treeLeaves.png");
+		TextureMgr.instance.add(treeLeaves, "TreeLeaves");
 	}
 }

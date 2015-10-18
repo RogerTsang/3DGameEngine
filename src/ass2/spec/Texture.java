@@ -16,7 +16,6 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 public class Texture {
 	
 	private int GL2id = GL.GL_TEXTURE0;
-	private int CurrentGL2id;
 	private int[] textureID = new int[1];
 	private int width;
 	private int height;
@@ -29,7 +28,6 @@ public class Texture {
 	 * @param fileName
 	 */
 	public Texture(GL2 gl, String fileName) {
-		CurrentGL2id = GL2id++;
 		TextureData data = null;
 		try {
 			File file = new File(fileName);
@@ -38,9 +36,7 @@ public class Texture {
 
 			//This library call flips all images the same way
 			data = AWTTextureIO.newTextureData(GLProfile.getDefault(), img, false);
-			
 		} catch (IOException exc) {
-			System.err.println(fileName);
             exc.printStackTrace();
             System.exit(1);
         }
@@ -49,7 +45,6 @@ public class Texture {
 		//The first time bind is called with the given id,
 		//an openGL texture object is created and bound to the id
 		//It also makes it the current texture.
-		gl.glActiveTexture(CurrentGL2id);
 		gl.glBindTexture(GL.GL_TEXTURE_2D, textureID[0]);
 
 		// Build texture initialised with image data.
@@ -73,7 +68,7 @@ public class Texture {
 		
 		// Specify how texture values combine with current surface color values.
 		gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE); 
-    	//gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);     		
+    	//gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);
 	}
 	
 	public void release(GL2 gl) {
@@ -91,7 +86,7 @@ public class Texture {
 	}
 	
 	public void activate(GL2 gl) {
-		gl.glActiveTexture(CurrentGL2id);
-	}
+		gl.glBindTexture(GL.GL_TEXTURE_2D, textureID[0]);
+	}	
 }
 
