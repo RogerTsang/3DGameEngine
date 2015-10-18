@@ -61,7 +61,7 @@ public class TerrainPainter {
 		}
 		//Add reading the roads from terrain
 		for (Road currentRoad: t.roads()) {
-			int completePointsSize = (int) ((double) currentRoad.points().size()*3/2);
+			int completePointsSize = (int) ((double) currentRoad.point().size()*3/2);
 			double[] completePoints = new double[completePointsSize];
 			//Add each point from the currentRoad's points into the completePoints ArrayList, in x,z,y format where y is calculated.
 			double previousValue = 0;
