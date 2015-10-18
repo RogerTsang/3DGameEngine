@@ -22,24 +22,25 @@ public class Camera implements KeyListener {
 	private static final double FAR = 10;
 	private static final double SPEED = 0.1;
 	private static final double CAMERA_HEIGHT = 1;
+	private static final double FPSCAMERA_OFFSET_SCALE = 10;
 	private static final boolean FLIGHT = false;
 	
 	private Terrain map;
+	private Avatar myAvatar;
+	private boolean firstPerson;
 	
 	private double positionX, positionY, positionZ;
 	private double stepX, stepY, stepZ, leftX, leftZ;
 	private double lookatX, lookatY, lookatZ;
 	private double rotateY, VAngle;
 	
-	// Default Frustum
-	private double aspect;
-
 	/**
 	 * Set up background colour
 	 * @param r
 	 */
 	public Camera(Terrain t) {
 		map = t;
+		myAvatar = new Avatar();
 		
 		double eye[] = t.getCentre();
 		positionX = eye[0];
@@ -50,8 +51,7 @@ public class Camera implements KeyListener {
 		updateStep();
 		updateLookAt();
 		
-		aspect = 4.0/3.0;
-		
+		firstPerson = true;
 		rotateY = 0;
 		VAngle = 0; //Vertical Angle
 	}
@@ -126,7 +126,18 @@ public class Camera implements KeyListener {
 		
         // Torch not working yet
 		GLU glu = new GLU();
-        glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
+		if (firstPerson) {
+			glu.gluLookAt(positionX, positionY, positionZ, lookatX, lookatY, lookatZ, 0, 1, 0);
+		} else {
+			glu.gluLookAt(positionX-stepX*FPSCAMERA_OFFSET_SCALE, 
+						  positionY+1, positionZ-stepZ*FPSCAMERA_OFFSET_SCALE, lookatX, lookatY, lookatZ, 0, 1, 0);
+		}
+        
+        // Draw Avatar
+        if (!firstPerson) {
+        	double[] position = {positionX+stepX*FPSCAMERA_OFFSET_SCALE, positionY-1, positionZ+stepZ*FPSCAMERA_OFFSET_SCALE};
+            myAvatar.draw(gl, position, rotateY);
+        }
 	}
     
 	public void reshape(GL2 gl, int x, int y, int width, int height) {
@@ -179,6 +190,14 @@ public class Camera implements KeyListener {
         	if (!FLIGHT) {            	
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
+        	break;
+        	
+        case KeyEvent.VK_F:
+        	if (firstPerson) {
+        		firstPerson = false;
+        	} else {
+        		firstPerson = true;
+        	}
         	break;
 
         case KeyEvent.VK_LEFT:

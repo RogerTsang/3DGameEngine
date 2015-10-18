@@ -6,13 +6,6 @@ public class TerrianSection {
 	private double[] p0, p1, p2;
 	private double c0, c1, c2; // Altitude Test
 	private double[] normal; // So far, we use face normals
-	
-	// Texture Mapping
-	private boolean texture;
-	private int textureWidth;
-	private int textureHeight;
-	private int terrainWidth;
-	private int terrainHeight;
 
 	private static final float[] diffuseCoeff = { 0.2f, 0.6f, 0.0f, 1.0f };
 	private static final float[] specularCoeff = { 0.5f, 0.0f, 0.2f, 1.0f };
@@ -21,30 +14,20 @@ public class TerrianSection {
 		this.p0 = v0;
 		this.p1 = v1;
 		this.p2 = v2;
+		// Before applying texture onto terrain
+		// I render it with grey scale depends on their altitude
+		// to test my terrain painter;
 		this.c0 = h0 * 1.0 / maxAl;
 		this.c1 = h1 * 1.0 / maxAl;
 		this.c2 = h2 * 1.0 / maxAl;
 		normal = MathUtil.getNormal(p0, p1, p2);
 		normal = MathUtil.normalise(normal);
-		textureWidth = 0;
-		textureHeight = 0;
-		terrainWidth = 0;
-		terrainHeight = 0;
-		texture = false;
-	}
-	
-	public void setTexture(String textureName, int terrainW, int terrainH) {
-		textureWidth = TextureMgr.instance.getWidth(textureName);
-		textureHeight = TextureMgr.instance.getHeight(textureName);
-		terrainWidth = terrainW;
-		terrainHeight = terrainH;
-		texture = true;
 	}
 
-	public void draw(GL2 gl) {
+	public void draw(GL2 gl, boolean texture, int terrainWidth, int terrainHeight) {
 		// Draw lower layer triangles
 		gl.glPushMatrix();
-		gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+		gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
 		
 		//Activate texture
 		TextureMgr.instance.activate(gl, "Grass");
@@ -55,7 +38,7 @@ public class TerrianSection {
 			drawMaterial(gl);
 
 			// Set up surface
-			drawSurface(gl, false, true);
+			drawSurface(gl, texture, terrainWidth, terrainHeight);
 		}
 		gl.glEnd();
 		gl.glPopMatrix();
@@ -66,34 +49,40 @@ public class TerrianSection {
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
 	}
 	
-	public void drawSurface(GL2 gl, boolean colour, boolean texture) {
+	public void drawSurface(GL2 gl, boolean texture, int tw, int th) {
+		int textureWidth = 0;
+		int textureHeight = 0;
+		if (texture) {
+			textureWidth = TextureMgr.instance.getWidth("Grass");
+			textureHeight = TextureMgr.instance.getHeight("Grass");
+		}
 		
 		gl.glNormal3dv(normal, 0);
 		
-		if (colour) {
+		if (!texture) {
 			gl.glColor4d(c0, c0, c0, 1);
-		} else if (texture) {
-			double w = p0[0] / textureWidth * terrainWidth;
-			double h = p0[2] / textureHeight * terrainHeight;
+		} else {
+			double w = p0[0] / textureWidth * tw;
+			double h = p0[2] / textureHeight * th;
 			gl.glTexCoord2d(w, h);
 		}
 		gl.glVertex3dv(p0, 0);
 		
-		if (colour) {
+		if (!texture) {
 			gl.glColor4d(c1, c1, c1, 1);
-		} else if (texture) {
-			double w = p1[0] / textureWidth * terrainWidth;
-			double h = p1[2] / textureHeight * terrainHeight;
+		} else {
+			double w = p1[0] / textureWidth * tw;
+			double h = p1[2] / textureHeight * th;
 			gl.glTexCoord2d(w, h);
 		}
 		
 		gl.glVertex3dv(p1, 0);
 		
-		if (colour) {
+		if (!texture) {
 			gl.glColor4d(c2, c2, c2, 1);
-		} else if (texture) {
-			double w = p2[0] / textureWidth * terrainWidth;
-			double h = p2[2] / textureHeight * terrainHeight;
+		} else {
+			double w = p2[0] / textureWidth * tw;
+			double h = p2[2] / textureHeight * th;
 			gl.glTexCoord2d(w, h);
 		}
 		gl.glVertex3dv(p2, 0);
