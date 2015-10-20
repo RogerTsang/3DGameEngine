@@ -22,7 +22,7 @@ import java.util.ArrayList;
  *
  * @author malcolmr
  */
-public class Game extends JFrame implements GLEventListener{
+public class Game extends JFrame implements GLEventListener {
 
     private Terrain myTerrain;
     private TerrainPainter myTerrainPainter;
@@ -31,6 +31,7 @@ public class Game extends JFrame implements GLEventListener{
     private Texture treeBark;
     private Texture treeLeaves;
     private Texture road;
+    private Texture cardboard;
     private Lights myLights;
 
     public Game(Terrain terrain) {
@@ -118,9 +119,6 @@ public class Game extends JFrame implements GLEventListener{
 		textureInit(gl);
 		myTerrainPainter.init(gl);
 		
-		road = new Texture(gl, "res/road.png");
-		TextureMgr.instance.add(road, "Road");
-		
 		// Light0: Sun
 		myLights.init(gl);
 	}
@@ -149,5 +147,8 @@ public class Game extends JFrame implements GLEventListener{
 		
 		road = new Texture(gl, "res/road.png");
 		TextureMgr.instance.add(road, "Road");
+		
+		cardboard = new Texture(gl, "res/cardboard.png");
+		TextureMgr.instance.add(cardboard, "Cardboard");
 	}
 }
