@@ -18,8 +18,8 @@ public class Avatar {
 	private static double[] nface3;
 	private static double[] nface4;
 
-	private static final float[] diffuseCoeff = { 0.6f, 0.6f, 0.0f, 1.0f };
-	private static final float[] specularCoeff = { 0.23f, 0.14f, 0.26f, 1.0f };
+	private static final float[] diffuseCoeff = { 0.74f, 0.51f, 0.1f, 1.0f };
+	private static final float[] specularCoeff = { 0.2f, 0.2f, 0.2f, 1.0f };
 
 	public Avatar() {
 		// Calculate the normal each face normal
@@ -42,7 +42,7 @@ public class Avatar {
 		gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
 		
 		//Activate texture
-		TextureMgr.instance.activate(gl, "TreeBark");
+		TextureMgr.instance.activate(gl, "Cardboard");
 		
 		drawface1(gl);
 		drawface2(gl);
@@ -69,9 +69,13 @@ public class Avatar {
 			gl.glNormal3dv(nface1, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(1, 0.75);
 			gl.glVertex3dv(b1, 0);
+			gl.glTexCoord2d(1, 1);
 			gl.glVertex3dv(t1, 0);
+			gl.glTexCoord2d(0, 1);
 			gl.glVertex3dv(t0, 0);
+			gl.glTexCoord2d(0, 0.75);
 			gl.glVertex3dv(b0, 0);
 		}
 		gl.glEnd();
@@ -87,9 +91,13 @@ public class Avatar {
 			gl.glNormal3dv(nface2, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(1, 0.5);
 			gl.glVertex3dv(b2, 0);
+			gl.glTexCoord2d(1, 0.75);
 			gl.glVertex3dv(t2, 0);
+			gl.glTexCoord2d(0, 0.75);
 			gl.glVertex3dv(t1, 0);
+			gl.glTexCoord2d(0, 0.5);
 			gl.glVertex3dv(b1, 0);
 		}
 		gl.glEnd();
@@ -105,9 +113,13 @@ public class Avatar {
 			gl.glNormal3dv(nface3, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(1, 0.75);
 			gl.glVertex3dv(b3, 0);
+			gl.glTexCoord2d(1, 1);
 			gl.glVertex3dv(t3, 0);
+			gl.glTexCoord2d(0, 1);
 			gl.glVertex3dv(t2, 0);
+			gl.glTexCoord2d(0, 0.75);
 			gl.glVertex3dv(b2, 0);
 		}
 		gl.glEnd();
@@ -123,9 +135,13 @@ public class Avatar {
 			gl.glNormal3dv(nface2, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(1, 0.75);
 			gl.glVertex3dv(b0, 0);
+			gl.glTexCoord2d(1, 1);
 			gl.glVertex3dv(t0, 0);
+			gl.glTexCoord2d(0, 1);
 			gl.glVertex3dv(t3, 0);
+			gl.glTexCoord2d(0, 0.75);
 			gl.glVertex3dv(b3, 0);
 		}
 		gl.glEnd();
@@ -141,12 +157,15 @@ public class Avatar {
 			gl.glNormal3dv(normalUp, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(1, 0);
 			gl.glVertex3dv(t2, 0);
+			gl.glTexCoord2d(0, 0.5);
 			gl.glVertex3dv(t0, 0);
+			gl.glTexCoord2d(0, 0);
 			gl.glVertex3dv(t1, 0);
 		}
 		gl.glEnd();
-		
+
 		gl.glBegin(GL2.GL_TRIANGLES);
 		{
 			// Set up material
@@ -156,8 +175,11 @@ public class Avatar {
 			gl.glNormal3dv(normalUp, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(1, 0.5);
 			gl.glVertex3dv(t3, 0);
+			gl.glTexCoord2d(0, 0.5);
 			gl.glVertex3dv(t0, 0);
+			gl.glTexCoord2d(1, 0);
 			gl.glVertex3dv(t2, 0);
 		}
 		gl.glEnd();
@@ -173,8 +195,11 @@ public class Avatar {
 			gl.glNormal3dv(normalDown, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(0, 0.5);
 			gl.glVertex3dv(b2, 0);
+			gl.glTexCoord2d(1, 0);
 			gl.glVertex3dv(b0, 0);
+			gl.glTexCoord2d(1, 0.5);
 			gl.glVertex3dv(b1, 0);
 		}
 		gl.glEnd();
@@ -188,8 +213,11 @@ public class Avatar {
 			gl.glNormal3dv(normalDown, 0);
 			
 			// Draw surface
+			gl.glTexCoord2d(0, 0);
 			gl.glVertex3dv(b3, 0);
+			gl.glTexCoord2d(1, 0);
 			gl.glVertex3dv(b0, 0);
+			gl.glTexCoord2d(0, 0.5);
 			gl.glVertex3dv(b2, 0);
 		}
 		gl.glEnd();

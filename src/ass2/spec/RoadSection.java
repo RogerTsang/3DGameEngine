@@ -7,7 +7,7 @@ public class RoadSection {
 	Road road;
 	Terrain terrain;
 	
-	private static final float[] diffuseCoeffient = {0.0f, 0.0f, 0.0f, 1.0f};
+	private static final float[] diffuseCoeffient = {0.2f, 0.2f, 0.2f, 1.0f};
 	private static final float[] specularCoeffient = {0.5f, 0.5f, 0.5f, 1.0f};
 	
 	public RoadSection(Road r, Terrain t) {
@@ -30,6 +30,7 @@ public class RoadSection {
 		double currPointZ;
 		double currPointY;
 		double[] currentNormal = new double[3];
+		double textureRatio = 0;
 		for (double i = 0; i < 1; i += 0.05) {
 			currPointX = road.point(i)[0];
 			currPointZ = road.point(i)[1];
@@ -54,8 +55,8 @@ public class RoadSection {
 			}
 			
 			//Determines the ratio of the current quad's length to its width to draw the texture on properly
-			double textureRatio = Math.sqrt((currPointX - prevPointX)*(currPointX - prevPointX) + (currPointZ - prevPointZ)*(currPointZ - prevPointZ))/road.width();
-			
+			textureRatio += Math.sqrt((currPointX - prevPointX)*(currPointX - prevPointX) + (currPointZ - prevPointZ)*(currPointZ - prevPointZ))/road.width();
+
 			gl.glTexCoord2d(textureRatio,1);
 			gl.glVertex3d(quadPoints[4], currPointY + 0.01, quadPoints[5]);
 			gl.glTexCoord2d(textureRatio,0);
