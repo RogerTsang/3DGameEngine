@@ -23,11 +23,11 @@ public class Camera implements KeyListener {
 	private static final double SPEED = 0.1;
 	private static final double CAMERA_HEIGHT = 1;
 	private static final double FPSCAMERA_OFFSET_SCALE = 10;
-	private static final boolean FLIGHT = false;
 	
 	private Terrain map;
 	private Avatar myAvatar;
 	private boolean firstPerson;
+	private static boolean flightMode;
 	
 	private double positionX, positionY, positionZ;
 	private double stepX, stepY, stepZ, leftX, leftZ;
@@ -52,6 +52,7 @@ public class Camera implements KeyListener {
 		updateLookAt();
 		
 		firstPerson = true;
+		flightMode = false;
 		rotateY = 0;
 		VAngle = 0; //Vertical Angle
 	}
@@ -157,7 +158,7 @@ public class Camera implements KeyListener {
         case KeyEvent.VK_W:
             positionX += stepX;
             positionZ += stepZ;
-            if (FLIGHT) {            	
+            if (flightMode) {            	
             	positionY += stepY;
             } else {
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
@@ -167,7 +168,7 @@ public class Camera implements KeyListener {
         case KeyEvent.VK_S:
         	positionX -= stepX;
             positionZ -= stepZ;
-            if (FLIGHT) {            	
+            if (flightMode) {            	
             	positionY -= stepY;
             } else {
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
@@ -178,7 +179,7 @@ public class Camera implements KeyListener {
         	
         	positionX += leftX;
         	positionZ += leftZ;
-        	if (!FLIGHT) {            	
+        	if (!flightMode) {            	
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
         	break;
@@ -187,7 +188,7 @@ public class Camera implements KeyListener {
         	
         	positionX -= leftX;
         	positionZ -= leftZ;
-        	if (!FLIGHT) {            	
+        	if (!flightMode) {            	
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
         	break;
@@ -217,17 +218,27 @@ public class Camera implements KeyListener {
         	break;
             
         case KeyEvent.VK_SPACE:
-        	if (FLIGHT) {
+        	if (flightMode) {
         		positionY += 0.1;
         	}
         	break;
         	
         case KeyEvent.VK_CONTROL:
-        	if (FLIGHT) {
+        	if (flightMode) {
         		positionY -= 0.1;
         	}
         	break;
+        	
+		case KeyEvent.VK_R: 
+			if (flightMode) {
+				System.out.println(" FlightMode Disabled ");
+			} else {
+				System.out.println(" FlightMode Enabled ");
+			}
+			flightMode = !flightMode;
+	    	break;
 		}
+		
 		updateStep();
 		updateLookAt();
 	}

@@ -116,6 +116,7 @@ public class Game extends JFrame implements GLEventListener{
 		// Enable texture
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		textureInit(gl);
+		myTerrainPainter.init(gl);
 		
 		road = new Texture(gl, "res/road.png");
 		TextureMgr.instance.add(road, "Road");

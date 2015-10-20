@@ -6,17 +6,20 @@ import java.util.List;
 import javax.media.opengl.GL2;
 
 public class TerrainPainter {
-	private ArrayList<TerrianSection> ts;
+	private ArrayList<TerrianSection> terrainSections;
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
+//	private ArrayList<DiamondVBO> DiamondSections;
+	private DiamondVBO DiamondTest;
 	private double maxAl;
 	private int terrainWidth;
 	private int terrainHeight;
 	
 	public TerrainPainter(Terrain t) {
-		ts = new ArrayList<TerrianSection>();
+		terrainSections = new ArrayList<TerrianSection>();
 		treeSections = new ArrayList<TreeSection>();
 		roadSections = new ArrayList<RoadSection>();
+//		DiamondSections = new ArrayList<DiamondVBO>();
 		
 		maxAl = t.getMaxAltitude();
 		terrainWidth = (int) t.size().getWidth();
@@ -25,8 +28,8 @@ public class TerrainPainter {
 	}
 	
 	public void draw(GL2 gl) {
-		for (TerrianSection ets: ts) {
-			ets.draw(gl, true, terrainWidth, terrainHeight);
+		for (TerrianSection currentTerrian: terrainSections) {
+			currentTerrian.draw(gl, true, terrainWidth, terrainHeight);
 		}
 		
 		for (TreeSection currentTree: treeSections) {
@@ -35,6 +38,11 @@ public class TerrainPainter {
 		for (RoadSection currentRoad: roadSections) {
 			currentRoad.draw(gl);
 		}
+		DiamondTest.draw(gl);
+	}
+	
+	public void init(GL2 gl) {
+		DiamondTest.init(gl);
 	}
 	
 	public void read(Terrain t) {
@@ -51,8 +59,8 @@ public class TerrainPainter {
 				double[] p1 = {x, h1, z};
 				double[] p2 = {x, h2, z+1};
 				double[] p3 = {x+1, h3, z+1};
-				ts.add(new TerrianSection(p0, p1, p2, h0, h1, h2, maxAl));
-				ts.add(new TerrianSection(p0, p2, p3, h0, h2, h3, maxAl));
+				terrainSections.add(new TerrianSection(p0, p1, p2, h0, h1, h2, maxAl));
+				terrainSections.add(new TerrianSection(p0, p2, p3, h0, h2, h3, maxAl));
 			}
 		}
 		//Add reading the trees from terrain
@@ -64,5 +72,7 @@ public class TerrainPainter {
 			//Add each point from the currentRoad's points into the completePoints ArrayList, in x,z,y format where y is calculated.
 			roadSections.add(new RoadSection(currentRoad, t));
 		}
+		
+		DiamondTest = new DiamondVBO(8, 2, 4.5);
 	}
 }
