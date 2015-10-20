@@ -116,7 +116,11 @@ public class Game extends JFrame implements GLEventListener {
 		
 		// Enable texture
 		gl.glEnable(GL2.GL_TEXTURE_2D);
+		
+		// Initialise textures
 		textureInit(gl);
+		
+		// INitialise terrain
 		myTerrainPainter.init(gl);
 		
 		// Light0: Sun

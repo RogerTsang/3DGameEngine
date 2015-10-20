@@ -28,6 +28,7 @@ public class Terrain {
     private double[][] myAltitude;
     private List<Tree> myTrees;
     private List<Road> myRoads;
+    private List<Diamond> myDiamonds;
     private float[] mySunlight;
     private double maxAltitude;
 
@@ -42,6 +43,7 @@ public class Terrain {
         myAltitude = new double[width][depth];
         myTrees = new ArrayList<Tree>();
         myRoads = new ArrayList<Road>();
+        myDiamonds = new ArrayList<Diamond>();
         mySunlight = new float[3];
         maxAltitude = 0;
     }
@@ -60,6 +62,10 @@ public class Terrain {
 
     public List<Road> roads() {
         return myRoads;
+    }
+    
+    public List<Diamond> diamonds() {
+        return myDiamonds;
     }
 
     public float[] getSunlight() {
@@ -229,6 +235,17 @@ public class Terrain {
     public void addRoad(double width, double[] spine) {
         Road road = new Road(width, spine);
         myRoads.add(road);        
+    }
+    
+    /**
+     * Add a diamond which is implemented in VBO 
+     * 
+     * @param x
+     * @param z
+     */
+    public void addDiamond(double x, double y, double z) {
+        Diamond diamond = new Diamond(x, y, z);
+        myDiamonds.add(diamond);
     }
 
 

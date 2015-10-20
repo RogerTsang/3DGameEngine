@@ -9,8 +9,8 @@ public class TerrainPainter {
 	private ArrayList<TerrianSection> terrainSections;
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
-//	private ArrayList<DiamondVBO> DiamondSections;
-	private DiamondVBO DiamondTest;
+	private ArrayList<DiamondSection> diamondSections;
+	private DiamondSection DiamondTest;
 	private double maxAl;
 	private int terrainWidth;
 	private int terrainHeight;
@@ -19,7 +19,7 @@ public class TerrainPainter {
 		terrainSections = new ArrayList<TerrianSection>();
 		treeSections = new ArrayList<TreeSection>();
 		roadSections = new ArrayList<RoadSection>();
-//		DiamondSections = new ArrayList<DiamondVBO>();
+		diamondSections = new ArrayList<DiamondSection>();
 		
 		maxAl = t.getMaxAltitude();
 		terrainWidth = (int) t.size().getWidth();
@@ -30,19 +30,21 @@ public class TerrainPainter {
 	public void draw(GL2 gl) {
 		for (TerrianSection currentTerrian: terrainSections) {
 			currentTerrian.draw(gl, true, terrainWidth, terrainHeight);
-		}
-		
+		}	
 		for (TreeSection currentTree: treeSections) {
 			currentTree.draw(gl);
 		}
 		for (RoadSection currentRoad: roadSections) {
 			currentRoad.draw(gl);
 		}
-		DiamondTest.draw(gl);
+		for (DiamondSection currentDiamond: diamondSections) {
+			currentDiamond.draw(gl);
+		}
 	}
 	
 	public void init(GL2 gl) {
-		DiamondTest.init(gl);
+		DiamondSection d = new DiamondSection();
+		d.init(gl);
 	}
 	
 	public void read(Terrain t) {
@@ -71,7 +73,9 @@ public class TerrainPainter {
 		for (Road currentRoad: t.roads()) {
 			roadSections.add(new RoadSection(currentRoad, t));
 		}
-		
-		DiamondTest = new DiamondVBO(8, 2, 4.5);
+		//Add a diamond into the game
+		for (Diamond currentDiamond: t.diamonds()) {
+			diamondSections.add(new DiamondSection(currentDiamond.getPosition()));
+		}
 	}
 }

@@ -8,7 +8,7 @@ import javax.media.opengl.GL2;
 
 import com.jogamp.common.nio.Buffers;
 
-public class DiamondVBO {
+public class DiamondSection {
 	private static final int SHORT = 2;
 	private static final int FLOAT = 4;
 	private static final int VERTICES_OFFSET = 0;
@@ -49,13 +49,17 @@ public class DiamondVBO {
 	private static int bufferIds[];
 	
 	private double posX, posY, posZ;
-	public DiamondVBO(double x, double y, double z) {
-		posX = x;
-		posY = y;
-		posZ = z;
+	public DiamondSection(double[] pos) {
+		posX = pos[0];
+		posY = pos[1];
+		posZ = pos[2];
 		vertices = new float[VERTICES_LENGTH];
 		normals = new float[NORMALS_LENGTH];
 		bufferIds = new int[2];
+	}
+	
+	public DiamondSection() {
+		// For VBO initiation purpose
 	}
 	
 	public void init(GL2 gl) {

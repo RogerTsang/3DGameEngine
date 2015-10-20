@@ -76,6 +76,17 @@ public class LevelIO {
                 terrain.addRoad(w, spine);
             }
         }
+        
+        if (jsonTerrain.has("diamonds")) {
+            JSONArray jsonDiamonds = jsonTerrain.getJSONArray("diamonds");
+            for (int i = 0; i < jsonDiamonds.length(); i++) {
+                JSONObject jsonDiamond = jsonDiamonds.getJSONObject(i);
+                double x = jsonDiamond.getDouble("x");
+                double y = jsonDiamond.getDouble("y");
+                double z = jsonDiamond.getDouble("z");
+                terrain.addDiamond(x, y, z);
+            }
+        }
         return terrain;
     }
 
