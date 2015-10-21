@@ -9,16 +9,32 @@ import javax.media.opengl.GL2;
 import com.jogamp.common.nio.Buffers;
 
 public class DiamondSection {
+	private static final String VERTEX_SHADER = "res/VertexTex.glsl";
+    private static final String FRAGMENT_SHADER = "res/FragmentTex.glsl";
+    private static int ShaderID;
+    private static int textureLocation;
+    
 	private static final int SHORT = 2;
 	private static final int FLOAT = 4;
+	
+	private static final int VERTICES_LENGTH = 14 * 3;
+	private static final int NORMALS_LENGTH = 24 * 3;
+	private static final int TEXTURE_LENGTH = 24 * 8;
+	
 	private static final int VERTICES_OFFSET = 0;
-	private static final int NORMALS_OFFSET = 39;
-	private static final int VERTICES_LENGTH = 42;
-	private static final int NORMALS_LENGTH = 72;
+	private static final int NORMALS_OFFSET = VERTICES_LENGTH;
+	private static final int TEXTURE_OFFSET = VERTICES_LENGTH + NORMALS_LENGTH;
+	
 	private static final float TOPFACE_RADIUS = 0.1f;
 	private static final float MIDFACE_RADIUS = 0.2f;
+	
+	private static final float[] ambientCoeff = { 0f, 0f, 0f, 1.0f };
+	private static final float[] diffuseCoeff = { 0f, 0f, 0f, 1.0f };
+	private static final float[] specularCoeff = { 0f, 0f, 0f, 1.0f };
+	
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer normalBuffer;
+	private FloatBuffer tecoorBuffer;
 	private ShortBuffer indexData;
 	private short indexes[] = {			
 			6,0,1,	6,1,7,
@@ -26,7 +42,7 @@ public class DiamondSection {
 			8,2,3,	8,3,9,
 			9,3,4,	9,4,10,
 			10,4,5,	10,5,11,
-			11,5,6,	11,0,6,// GL2.GL_TRIANGLES
+			11,5,0,	11,0,6,// GL2.GL_TRIANGLES
 			
 			12,6,7,
 			12,7,8,
@@ -42,6 +58,7 @@ public class DiamondSection {
 			13,1,0,
 			13,0,5, // GL2.GL_TRIANGLES
 	};
+	private static float textcoor[];
 	private static float vertices[];
 	private static float normals[];
 	private static int bufferIds[];
@@ -63,43 +80,86 @@ public class DiamondSection {
 	public void init(GL2 gl) {
 		calculateV();
 		calculateN();
+		calculateT();
 		bufferInit();
 		
+		// VBO section
 		gl.glGenBuffers(2, bufferIds, 0);
 		// would use GL.GL_ELEMENT_ARRAY_BUFFER for indices
 		// BufferIds[0] = vertices + normals
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferIds[0]);
-		gl.glBufferData(GL.GL_ARRAY_BUFFER, VERTICES_LENGTH*FLOAT, null, GL2.GL_STATIC_DRAW);
+		gl.glBufferData(GL.GL_ARRAY_BUFFER, (VERTICES_LENGTH + NORMALS_LENGTH + TEXTURE_LENGTH)*FLOAT, null, GL2.GL_STATIC_DRAW);
 		gl.glBufferSubData(GL.GL_ARRAY_BUFFER, VERTICES_OFFSET*FLOAT, VERTICES_LENGTH*FLOAT, vertexBuffer);
 		gl.glBufferSubData(GL.GL_ARRAY_BUFFER, NORMALS_OFFSET*FLOAT, NORMALS_LENGTH*FLOAT, normalBuffer);
+		gl.glBufferSubData(GL.GL_ARRAY_BUFFER, TEXTURE_OFFSET*FLOAT, TEXTURE_LENGTH*FLOAT, tecoorBuffer);
 		// BufferIds[1] = indexes
 		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, bufferIds[1]);
 		gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexes.length*SHORT, indexData, GL2.GL_STATIC_DRAW);
+		
+		// Shader Program Section
+		// Compile & Generate Shader Program
+		/*
+		try {
+			ShaderID = Shader.initShaders(gl, VERTEX_SHADER, FRAGMENT_SHADER);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+		// Get Shader Texture Location
+		textureLocation = gl.glGetUniformLocation(ShaderID, "texUnit1");
+		*/
 	}
 	
 	public void draw(GL2 gl) {
 		gl.glPushMatrix();
+		// Position
 		gl.glTranslated(posX, posY, posZ);
-		gl.glColor3f(1f, 1f, 1f);
+
+		// Use Shader Program
+		/*
+		gl.glUseProgram(ShaderID);
+		int textureID = TextureMgr.instance.getGLID("Diamond");
+    	gl.glUniform1i(textureLocation , textureID);
+		*/
+		
+    	// Texture
+    	TextureMgr.instance.activate(gl, "Diamond");
+    	
+    	// Setup Material
+    	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, ambientCoeff, 0);
+    	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeff, 0);
+    	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
+    	
 		// Enable vertex arrays: co-ordinates, normal and index.
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+		gl.glEnableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
 		gl.glEnableClientState(GL2.GL_INDEX_ARRAY);
+		
 		// Bind vertex and index array
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,bufferIds[0]);
-		gl.glVertexPointer(3, GL.GL_FLOAT, 0, VERTICES_OFFSET);
+		gl.glVertexPointer(3, GL.GL_FLOAT, 0, VERTICES_OFFSET*FLOAT);
+		gl.glNormalPointer(GL.GL_FLOAT, 0, NORMALS_OFFSET*FLOAT);
+		gl.glTexCoordPointer(2, GL.GL_FLOAT, 0, TEXTURE_OFFSET*FLOAT);
+		
 		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER,bufferIds[1]);
 		gl.glIndexPointer(GL2.GL_SHORT, 0, null);
-    	// Specify locations for the co-ordinates and color arrays.
-    	gl.glNormalPointer(GL.GL_FLOAT, 0, NORMALS_OFFSET);
-    	// Drawing
+		
+    	// Index Drawing
     	gl.glDrawElements(GL2.GL_TRIANGLES, indexes.length, GL2.GL_UNSIGNED_SHORT, 0);
     	
     	// Disable vertex arrays: co-ordinates, normal and index.
+    	gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+    	gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0);
     	gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
     	gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+    	gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
     	gl.glDisableClientState(GL2.GL_INDEX_ARRAY);
     	
+    	// Disable Shader
+    	/*
+    	gl.glUseProgram(0);
+    	*/
     	gl.glPopMatrix();
 	}
 	
@@ -177,9 +237,24 @@ public class DiamondSection {
 		}
 	}
 	
+	public void calculateT() {
+		textcoor = new float[TEXTURE_LENGTH];
+		for (int i = 0; i < TEXTURE_LENGTH / 8; i++) {
+			textcoor[i*8+0] = 1f;
+			textcoor[i*8+1] = 1f;
+			textcoor[i*8+2] = 0f;
+			textcoor[i*8+3] = 1f;
+			textcoor[i*8+4] = 0f;
+			textcoor[i*8+5] = 0f;
+			textcoor[i*8+6] = 0f;
+			textcoor[i*8+7] = 0f;
+		}
+	}
+	
 	public void bufferInit() {
 		vertexBuffer = Buffers.newDirectFloatBuffer(vertices);
 		normalBuffer = Buffers.newDirectFloatBuffer(normals);
+		tecoorBuffer = Buffers.newDirectFloatBuffer(textcoor);
 		indexData = Buffers.newDirectShortBuffer(indexes);
 	}
 }

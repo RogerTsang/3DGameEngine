@@ -46,21 +46,49 @@ public class TextureMgr {
 		return names.get(currentIndex);
 	}
 	
+	/**
+	 * Get specific texture image width with provided texture name
+	 * @param name
+	 * @return
+	 */
 	public int getWidth(String name) {
 		currentIndex = names.indexOf(name);
 		return textures.get(currentIndex).getWidth();
 	}
 	
+	/**
+	 * Get current texture image width
+	 * @return
+	 */
 	public int getWidth() {
 		return textures.get(currentIndex).getWidth();
 	}
 	
+	/**
+	 * Get specific texture image height with provided texture name
+	 * @param name
+	 * @return
+	 */
 	public int getHeight(String name) {
 		currentIndex = name.indexOf(name);
 		return textures.get(currentIndex).getHeight();
 	}
 	
+	/**
+	 * Get current texture image height
+	 * @return
+	 */
 	public int getHeight() {
 		return textures.get(currentIndex).getHeight();
+	}
+	
+	/**
+	 * Get texture OpenGL ID with provided texture name
+	 * @param name
+	 * @return
+	 */
+	public int getGLID(String name) {
+		int index = name.indexOf(name);
+		return textures.get(index).getGLID();
 	}
 }

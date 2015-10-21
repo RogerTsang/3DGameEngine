@@ -15,7 +15,6 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 public class Texture {
 	
-	private int GL2id = GL.GL_TEXTURE0;
 	private int[] textureID = new int[1];
 	private int width;
 	private int height;
@@ -70,6 +69,10 @@ public class Texture {
 		// Specify how texture values combine with current surface color values.
 		gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_MODULATE); 
     	//gl.glTexEnvf(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);
+	}
+	
+	public int getGLID() {
+		return textureID[0];
 	}
 	
 	public void release(GL2 gl) {
