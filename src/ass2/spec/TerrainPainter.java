@@ -10,7 +10,6 @@ public class TerrainPainter {
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
 	private ArrayList<DiamondSection> diamondSections;
-	private DiamondSection DiamondTest;
 	private double maxAl;
 	private int terrainWidth;
 	private int terrainHeight;

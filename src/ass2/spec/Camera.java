@@ -232,8 +232,10 @@ public class Camera implements KeyListener {
 		case KeyEvent.VK_R: 
 			if (flightMode) {
 				System.out.println(" FlightMode Disabled ");
+				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
 			} else {
 				System.out.println(" FlightMode Enabled ");
+				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT * 3;
 			}
 			flightMode = !flightMode;
 	    	break;

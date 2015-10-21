@@ -6,10 +6,15 @@ public class Lights {
 	private Terrain map;
 	private int step;
 	private static final boolean NIGHT = true;
+	private static final float CONSTANT_A = 2f;
+	private static final float LINEAR_A = 1f;
+	private static final float QUADRATIC_A = 0.5f;
+	private static float[] sun_pos;
 	
 	public Lights(Terrain t) {
 		map = t;
 		step = 0;
+		sun_pos = map.getSunlight();
 	}
 	
 	public void init(GL2 gl) {
@@ -20,16 +25,12 @@ public class Lights {
 	}
 	
 	public void drawSun(GL2 gl) {
-		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_CONSTANT_ATTENUATION, 2F);
-		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_LINEAR_ATTENUATION, 1F);
-		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_QUADRATIC_ATTENUATION, 0.5F);
+		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_CONSTANT_ATTENUATION, CONSTANT_A);
+		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_LINEAR_ATTENUATION, LINEAR_A);
+		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_QUADRATIC_ATTENUATION, QUADRATIC_A);
 		
-		float[] pos0 = map.getSunlight();
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos0, 0);
-		
-		float[] spe = {0.0f, 0.0f, 0.0f, 1.0f};
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, spe, 0);
-		
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, sun_pos, 0);
+		gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
 		
 		float change; // Daylight Simulator
 		if (NIGHT) {
@@ -38,6 +39,9 @@ public class Lights {
 		} else {
 			change = 1f;
 		}
+		
+		float[] spe = {0.3f, 0.3f, 0.3f, 1.0f};
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, spe, 0);
 		
 		float[] amb = {0.05f+change*0.1f, 0.05f+change*0.1f, 0.05f+change*0.1f, 1.0f};
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, amb, 0);

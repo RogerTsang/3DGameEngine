@@ -134,6 +134,7 @@ public class DiamondSection {
 		float[] p1 = new float[3];
 		float[] p2 = new float[3];
 		float[] normal = new float[3];
+		
 		// Top layer normals
 		for (int i = 0; i < 6; i++) {
 			int id0 = i % 6 + 6;
@@ -165,7 +166,7 @@ public class DiamondSection {
 			normals[i*3+2+18] = normal[2];
 		}
 		
-		// top fragment
+		// top fragment normals
 		for (int i = 12; i < 18; i++) {
 			normal[0] = 0.0f;
 			normal[1] = 1.0f;
@@ -173,9 +174,6 @@ public class DiamondSection {
 			normals[i*3+0+18] = normal[0];
 			normals[i*3+1+18] = normal[1];
 			normals[i*3+2+18] = normal[2];
-		}
-		for (int i = 0; i < 24; i++) {
-			System.out.println("[\t" + normals[i*3] + ";\t" + normals[i*3+1] + ";\t" + normals[i*3+2]);
 		}
 	}
 	

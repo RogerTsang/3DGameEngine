@@ -27,11 +27,6 @@ public class Game extends JFrame implements GLEventListener {
     private Terrain myTerrain;
     private TerrainPainter myTerrainPainter;
     private Camera myCamera;
-    private Texture grass;
-    private Texture treeBark;
-    private Texture treeLeaves;
-    private Texture road;
-    private Texture cardboard;
     private Lights myLights;
 
     public Game(Terrain terrain) {
@@ -133,26 +128,27 @@ public class Game extends JFrame implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 		myCamera.reshape(gl, x, y, width, height);
 		
-		// Link textures to the world again
-		textureInit(gl);
 	}
 	
 	private void textureInit(GL2 gl) {
 		// Create a new texture instance and link it to a file
-		grass = new Texture(gl, "res/grass.png");
+		Texture grass = new Texture(gl, "res/grass.png");
 		// Link a texture to the texture manager (storage) 
 		TextureMgr.instance.add(grass, "Grass"); 
 		
-		treeBark = new Texture(gl, "res/treeBark.png");
+		Texture treeBark = new Texture(gl, "res/treeBark.png");
 		TextureMgr.instance.add(treeBark, "TreeBark");
 		
-		treeLeaves = new Texture(gl, "res/treeLeaves.png");
+		Texture treeLeaves = new Texture(gl, "res/treeLeaves.png");
 		TextureMgr.instance.add(treeLeaves, "TreeLeaves");
 		
-		road = new Texture(gl, "res/road.png");
+		Texture road = new Texture(gl, "res/road.png");
 		TextureMgr.instance.add(road, "Road");
 		
-		cardboard = new Texture(gl, "res/cardboard.png");
+		Texture cardboard = new Texture(gl, "res/cardboard.png");
 		TextureMgr.instance.add(cardboard, "Cardboard");
+		
+		Texture diamond = new Texture(gl, "res/diamond.png");
+		TextureMgr.instance.add(diamond, "Diamond");
 	}
 }
