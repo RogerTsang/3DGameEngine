@@ -14,22 +14,13 @@ public class DiamondSection {
 	private static final int VERTICES_OFFSET = 0;
 	private static final int NORMALS_OFFSET = 39;
 	private static final int VERTICES_LENGTH = 42;
-	private static final int NORMALS_LENGTH = 39;
+	private static final int NORMALS_LENGTH = 72;
 	private static final float TOPFACE_RADIUS = 0.1f;
 	private static final float MIDFACE_RADIUS = 0.2f;
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer normalBuffer;
 	private ShortBuffer indexData;
-	private static final int INDEX_FAN = 0;
-	private static final int INDEX_STRIP = 8;
-	private short indexes[] = {
-			13,5,4,
-			13,4,3,
-			13,3,2,
-			13,2,1,
-			13,1,0,
-			13,0,5, // GL2.GL_TRIANGLES
-			
+	private short indexes[] = {			
 			6,0,1,	6,1,7,
 			7,1,2,	7,2,8,
 			8,2,3,	8,3,9,
@@ -42,7 +33,14 @@ public class DiamondSection {
 			12,8,9,
 			12,9,10,
 			12,10,11,
-			12,11,6 // GL2.GL_TRIANGLES
+			12,11,6, // GL2.GL_TRIANGLES
+			
+			13,5,4,
+			13,4,3,
+			13,3,2,
+			13,2,1,
+			13,1,0,
+			13,0,5, // GL2.GL_TRIANGLES
 	};
 	private static float vertices[];
 	private static float normals[];
@@ -73,7 +71,7 @@ public class DiamondSection {
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferIds[0]);
 		gl.glBufferData(GL.GL_ARRAY_BUFFER, VERTICES_LENGTH*FLOAT, null, GL2.GL_STATIC_DRAW);
 		gl.glBufferSubData(GL.GL_ARRAY_BUFFER, VERTICES_OFFSET*FLOAT, VERTICES_LENGTH*FLOAT, vertexBuffer);
-//		gl.glBufferSubData(GL.GL_ARRAY_BUFFER, NORMALS_OFFSET*FLOAT, NORMALS_LENGTH*FLOAT, normalBuffer);
+		gl.glBufferSubData(GL.GL_ARRAY_BUFFER, NORMALS_OFFSET*FLOAT, NORMALS_LENGTH*FLOAT, normalBuffer);
 		// BufferIds[1] = indexes
 		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, bufferIds[1]);
 		gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexes.length*SHORT, indexData, GL2.GL_STATIC_DRAW);
@@ -85,22 +83,21 @@ public class DiamondSection {
 		gl.glColor3f(1f, 1f, 1f);
 		// Enable vertex arrays: co-ordinates, normal and index.
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-//		gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+		gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
 		gl.glEnableClientState(GL2.GL_INDEX_ARRAY);
 		// Bind vertex and index array
 		gl.glBindBuffer(GL.GL_ARRAY_BUFFER,bufferIds[0]);
 		gl.glVertexPointer(3, GL.GL_FLOAT, 0, VERTICES_OFFSET);
 		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER,bufferIds[1]);
-//		gl.glIndexPointer(GL2.GL_SHORT, 0, null);
+		gl.glIndexPointer(GL2.GL_SHORT, 0, null);
     	// Specify locations for the co-ordinates and color arrays.
-//    	gl.glNormalPointer(GL.GL_FLOAT, 0, NORMALS_OFFSET);
+    	gl.glNormalPointer(GL.GL_FLOAT, 0, NORMALS_OFFSET);
     	// Drawing
-//    	gl.glDrawElements(GL2.GL_TRIANGLE_FAN, 8, GL2.GL_UNSIGNED_SHORT, INDEX_FAN);
     	gl.glDrawElements(GL2.GL_TRIANGLES, indexes.length, GL2.GL_UNSIGNED_SHORT, 0);
     	
     	// Disable vertex arrays: co-ordinates, normal and index.
     	gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-//    	gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+    	gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
     	gl.glDisableClientState(GL2.GL_INDEX_ARRAY);
     	
     	gl.glPopMatrix();
@@ -139,29 +136,47 @@ public class DiamondSection {
 		float[] normal = new float[3];
 		// Top layer normals
 		for (int i = 0; i < 6; i++) {
-			p0[0] = vertices[i*3+6+0]; p1[0] = vertices[i*3+0]; p2[0] = vertices[((i+1)%6)*3+0];
-			p0[1] = vertices[i*3+6+1]; p1[1] = vertices[i*3+1]; p2[1] = vertices[((i+1)%6)*3+0];
-			p0[2] = vertices[i*3+6+2]; p1[2] = vertices[i*3+2]; p2[2] = vertices[((i+1)%6)*3+0];
+			int id0 = i % 6 + 6;
+			int id1 = i % 6;
+			int id2 = (i + 1) % 6;
+			p0[0] = vertices[id0*3+0]; p1[0] = vertices[id1*3+0]; p2[0] = vertices[id2*3+0];
+			p0[1] = vertices[id0*3+1]; p1[1] = vertices[id1*3+1]; p2[1] = vertices[id2*3+1];
+			p0[2] = vertices[id0*3+2]; p1[2] = vertices[id1*3+2]; p2[2] = vertices[id2*3+2];
 			normal = MathUtil.getNormalisedNormal(p0, p1, p2);
-			normals[i*3+0] = normal[0];
-			normals[i*3+1] = normal[1];
-			normals[i*3+2] = normal[2];
+			normals[i*6+0] = normal[0];
+			normals[i*6+1] = normal[1];
+			normals[i*6+2] = normal[2];
+			normals[i*6+3] = normal[0];
+			normals[i*6+4] = normal[1];
+			normals[i*6+5] = normal[2];
 		}
 		
 		// Bottom layer normals
 		for (int i = 6; i < 12; i++) {
-			p0[0] = vertices[36+0]; p1[0] = vertices[i*3+0]; p2[0] = vertices[((i+1)%6+6)*3+0];
-			p0[1] = vertices[36+1]; p1[1] = vertices[i*3+1]; p2[1] = vertices[((i+1)%6+6)*3+1];
-			p0[2] = vertices[36+2]; p1[2] = vertices[i*3+2]; p2[2] = vertices[((i+1)%6+6)*3+2];
+			int id0 = 12;
+			int id1 = i % 6 + 6;
+			int id2 = (i + 1) % 6 + 6;
+			p0[0] = vertices[id0+0]; p1[0] = vertices[id1*3+0]; p2[0] = vertices[id2*3+0];
+			p0[1] = vertices[id0+1]; p1[1] = vertices[id1*3+1]; p2[1] = vertices[id2*3+1];
+			p0[2] = vertices[id0+2]; p1[2] = vertices[id1*3+2]; p2[2] = vertices[id2*3+2];
 			normal = MathUtil.getNormalisedNormal(p0, p1, p2);
-			normals[i*3+0] = normal[0];
-			normals[i*3+0] = normal[1];
-			normals[i*3+0] = normal[2];
+			normals[i*3+0+18] = normal[0];
+			normals[i*3+1+18] = normal[1];
+			normals[i*3+2+18] = normal[2];
 		}
+		
 		// top fragment
-		normals[36] = 0f;
-		normals[37] = 1f;
-		normals[38] = 0f;
+		for (int i = 12; i < 18; i++) {
+			normal[0] = 0.0f;
+			normal[1] = 1.0f;
+			normal[2] = 0.0f;
+			normals[i*3+0+18] = normal[0];
+			normals[i*3+1+18] = normal[1];
+			normals[i*3+2+18] = normal[2];
+		}
+		for (int i = 0; i < 24; i++) {
+			System.out.println("[\t" + normals[i*3] + ";\t" + normals[i*3+1] + ";\t" + normals[i*3+2]);
+		}
 	}
 	
 	public void bufferInit() {
