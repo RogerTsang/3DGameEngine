@@ -2,10 +2,13 @@ package ass2.spec;
 
 import javax.media.opengl.GL2;
 
+import com.jogamp.opengl.util.gl2.GLUT;
+
 public class Lights {
 	private Terrain map;
 	private int step;
 	private static final boolean NIGHT = true;
+	private static final boolean DRAWSUN = true;
 	private static final float CONSTANT_A = 2f;
 	private static final float LINEAR_A = 1f;
 	private static final float QUADRATIC_A = 0.5f;
@@ -15,6 +18,7 @@ public class Lights {
 		map = t;
 		step = 0;
 		sun_pos = map.getSunlight();
+		System.out.println("Sun Position: " + sun_pos[0] + " " + sun_pos[1] + " " + sun_pos[2]);
 	}
 	
 	public void init(GL2 gl) {
@@ -30,7 +34,7 @@ public class Lights {
 		gl.glLightf(GL2.GL_LIGHT0, GL2.GL_QUADRATIC_ATTENUATION, QUADRATIC_A);
 		
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, sun_pos, 0);
-		gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
+//		gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
 		
 		float change; // Daylight Simulator
 		if (NIGHT) {
@@ -48,5 +52,23 @@ public class Lights {
 		
 		float[] dif = {0.5f+change*0.5f+0.4f, 0.5f+change*0.5f+0.2f, 0.5f+change*0.5f, 0.1f};
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, dif, 0);
+		
+		if (DRAWSUN) {
+			
+			gl.glPushMatrix();
+			GLUT glut = new GLUT();
+			float[] ambientCoeff = { 0.5f, 0.5f, 0.5f, 1.0f };
+			float[] diffuseCoeff = { 0.7f, 0.7f, 0.7f, 1.0f };
+			float[] specularCoeff = { 0.7f, 0.7f, 0.3f, 1.0f };
+			gl.glColor3f(1f, 0.5f, 0f);
+			gl.glTranslated(sun_pos[0], sun_pos[1], sun_pos[2]);
+			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, ambientCoeff, 0);
+			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeff, 0);
+			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
+			// Because the light is inside the sun
+			// So take negative value as radius will correct the sun face
+			glut.glutSolidSphere(-0.5, 8, 8);
+			gl.glPopMatrix();
+		}
 	}
 }

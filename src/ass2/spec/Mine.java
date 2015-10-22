@@ -5,11 +5,11 @@ package ass2.spec;
  *
  * @author malcolmr
  */
-public class Diamond {
+public class Mine {
 
     private double[] myPos;
     
-    public Diamond(double x, double y, double z) {
+    public Mine(double x, double y, double z) {
         myPos = new double[3];
         myPos[0] = x;
         myPos[1] = y;

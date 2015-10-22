@@ -9,7 +9,7 @@ public class TerrainPainter {
 	private ArrayList<TerrianSection> terrainSections;
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
-	private ArrayList<DiamondSection> diamondSections;
+	private ArrayList<MineSection> mineSections;
 	private double maxAl;
 	private int terrainWidth;
 	private int terrainHeight;
@@ -18,7 +18,7 @@ public class TerrainPainter {
 		terrainSections = new ArrayList<TerrianSection>();
 		treeSections = new ArrayList<TreeSection>();
 		roadSections = new ArrayList<RoadSection>();
-		diamondSections = new ArrayList<DiamondSection>();
+		mineSections = new ArrayList<MineSection>();
 		
 		maxAl = t.getMaxAltitude();
 		terrainWidth = (int) t.size().getWidth();
@@ -36,13 +36,13 @@ public class TerrainPainter {
 		for (RoadSection currentRoad: roadSections) {
 			currentRoad.draw(gl);
 		}
-		for (DiamondSection currentDiamond: diamondSections) {
-			currentDiamond.draw(gl);
+		for (MineSection currentMine: mineSections) {
+			currentMine.draw(gl);
 		}
 	}
 	
 	public void init(GL2 gl) {
-		DiamondSection d = new DiamondSection();
+		MineSection d = new MineSection();
 		d.init(gl);
 	}
 	
@@ -73,8 +73,8 @@ public class TerrainPainter {
 			roadSections.add(new RoadSection(currentRoad, t));
 		}
 		//Add a diamond into the game
-		for (Diamond currentDiamond: t.diamonds()) {
-			diamondSections.add(new DiamondSection(currentDiamond.getPosition()));
+		for (Mine currentMine: t.mines()) {
+			mineSections.add(new MineSection(currentMine.getPosition()));
 		}
 	}
 }

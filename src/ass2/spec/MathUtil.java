@@ -22,6 +22,12 @@ public class MathUtil {
     	mag = Math.sqrt(mag);
     	return mag;
     }
+	
+	public static float getMagnitude(float [] n) {
+		float mag = n[0]*n[0] + n[1]*n[1] + n[2]*n[2];
+    	mag = (float) Math.sqrt(mag);
+    	return mag;
+    }
     
 	/**
 	 * Normailse a 3D vector
@@ -34,18 +40,11 @@ public class MathUtil {
     	return norm;
     }
 	
-	public static float [] getNormalisedNormal(float[] p0, float[] p1, float[] p2) {
-		float u[] = {p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]};
-    	float v[] = {p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]};
-    	float n[] = new float[3];
-    	n[0] = u[1]*v[2] - u[2]*v[1];
-    	n[1] = u[2]*v[0] - u[0]*v[2];
-    	n[2] = u[0]*v[1] - u[1]*v[0];
-    	float mag = n[0]*n[0] + n[1]*n[1] + n[2]*n[2];
-    	mag = (float) Math.sqrt(mag);
-    	float norm[] = {(float) n[0]/mag, (float) n[1]/mag, (float) n[2]/mag};
+	public static float [] normalise(float [] n) {
+		float  mag = getMagnitude(n);
+		float norm[] = {n[0]/mag,n[1]/mag,n[2]/mag};
     	return norm;
-	}
+    }
     
 	/**
 	 * Cross Product
@@ -55,6 +54,15 @@ public class MathUtil {
 	 */
 	public static double [] cross(double u [], double v[]) {
     	double crossProduct[] = new double[3];
+    	crossProduct[0] = u[1]*v[2] - u[2]*v[1];
+    	crossProduct[1] = u[2]*v[0] - u[0]*v[2];
+    	crossProduct[2] = u[0]*v[1] - u[1]*v[0];
+    	//System.out.println("CP " + crossProduct[0] + " " +  crossProduct[1] + " " +  crossProduct[2]);
+    	return crossProduct;
+    }
+	
+	public static float [] cross(float u [], float v[]) {
+		float crossProduct[] = new float[3];
     	crossProduct[0] = u[1]*v[2] - u[2]*v[1];
     	crossProduct[1] = u[2]*v[0] - u[0]*v[2];
     	crossProduct[2] = u[0]*v[1] - u[1]*v[0];
@@ -72,6 +80,13 @@ public class MathUtil {
 	public static double [] getNormal(double[] p0, double[] p1, double[] p2) {
     	double u[] = {p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]};
     	double v[] = {p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]};
+    	
+    	return cross(u,v);
+    }
+	
+	public static float[] getNormal(float[] p0, float[] p1, float[] p2) {
+		float u[] = {p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]};
+		float v[] = {p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]};
     	
     	return cross(u,v);
     }
