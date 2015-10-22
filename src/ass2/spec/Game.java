@@ -112,6 +112,10 @@ public class Game extends JFrame implements GLEventListener {
 		// Enable texture
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		
+		// Enable Blending
+		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+		gl.glEnable(GL2.GL_BLEND);
+		
 		// Initialise textures
 		textureInit(gl);
 		

@@ -24,9 +24,9 @@ public class SlimeSection {
 	private static final float MIDFACE_RADIUS = 0.2f;
 	private static final float HEIGHT = 0.3f;
 	
-	private static final float[] ambientCoeff = { 0.2f, 0.2f, 0.5f, 1.0f };
-	private static final float[] diffuseCoeff = { 0.8f, 0.6f, 1f, 1.0f };
-	private static final float[] specularCoeff = { 0.8f, 0.8f, 0.3f, 1.0f };
+	private static final float[] ambientCoeff = { 0.4f, 0.3f, 0.8f, 1.0f };
+	private static final float[] diffuseCoeff = { 0.5f, 0.4f, 1f, 1.0f };
+	private static final float[] specularCoeff = { 0.4f, 0.4f, 0.8f, 1.0f };
 	
 	private static final String VERTEX_SHADER = "res/VertexTex.glsl";
 	private static final String FRAGMENT_SHADER = "res/FragmentTex.glsl";
