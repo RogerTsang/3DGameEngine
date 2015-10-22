@@ -77,13 +77,13 @@ public class LevelIO {
             }
         }
         
-        if (jsonTerrain.has("mines")) {
-            JSONArray jsonDiamonds = jsonTerrain.getJSONArray("mines");
+        if (jsonTerrain.has("slimes")) {
+            JSONArray jsonDiamonds = jsonTerrain.getJSONArray("slimes");
             for (int i = 0; i < jsonDiamonds.length(); i++) {
                 JSONObject jsonDiamond = jsonDiamonds.getJSONObject(i);
                 double x = jsonDiamond.getDouble("x");
                 double z = jsonDiamond.getDouble("z");
-                terrain.addMine(x, z);
+                terrain.addSlime(x, z);
             }
         }
         return terrain;

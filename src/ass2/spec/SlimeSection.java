@@ -8,7 +8,7 @@ import javax.media.opengl.GL2;
 
 import com.jogamp.common.nio.Buffers;
 
-public class MineSection {
+public class SlimeSection {
 	private static final int SHORT = 2;
 	private static final int FLOAT = 4;
 	
@@ -22,10 +22,17 @@ public class MineSection {
 	
 	private static final float TOPFACE_RADIUS = 0.1f;
 	private static final float MIDFACE_RADIUS = 0.2f;
+	private static final float HEIGHT = 0.3f;
 	
 	private static final float[] ambientCoeff = { 0.2f, 0.2f, 0.5f, 1.0f };
 	private static final float[] diffuseCoeff = { 0.8f, 0.6f, 1f, 1.0f };
 	private static final float[] specularCoeff = { 0.8f, 0.8f, 0.3f, 1.0f };
+	
+	private static final String VERTEX_SHADER = "res/VertexTex.glsl";
+	private static final String FRAGMENT_SHADER = "res/FragmentTex.glsl";
+	private static int ShaderID;
+	private static long currentTime;
+	private static long startTime;
 	
 	private FloatBuffer vertexBuffer;
 	private FloatBuffer normalBuffer;
@@ -50,7 +57,7 @@ public class MineSection {
 	private static int bufferIds[];
 	
 	private double posX, posY, posZ;
-	public MineSection(double[] pos) {
+	public SlimeSection(double[] pos) {
 		posX = pos[0];
 		posY = pos[1];
 		posZ = pos[2];
@@ -59,7 +66,7 @@ public class MineSection {
 		bufferIds = new int[2];
 	}
 	
-	public MineSection() {
+	public SlimeSection() {
 		// For VBO initiation purpose
 	}
 	
@@ -80,6 +87,16 @@ public class MineSection {
 		// BufferIds[1] = indexes
 		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, bufferIds[1]);
 		gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexes.length*SHORT, indexData, GL2.GL_STATIC_DRAW);
+		
+		// Shader section
+	   	 try {
+            ShaderID = Shader.initShaders(gl,VERTEX_SHADER,FRAGMENT_SHADER);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+	   	 startTime = System.currentTimeMillis();
 	}
 	
 	public void draw(GL2 gl) {
@@ -88,13 +105,22 @@ public class MineSection {
 		gl.glTranslated(posX, posY, posZ);
 		
     	// Texture
-    	TextureMgr.instance.activate(gl, "Diamond");
+    	TextureMgr.instance.activate(gl, "Mine");
     	
     	// Setup Material
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, ambientCoeff, 0);
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeff, 0);
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
     	
+    	// Setup Shader
+    	gl.glUseProgram(ShaderID);
+    	currentTime = System.currentTimeMillis();
+        float elapsedTime = currentTime - startTime;
+        // Write current system time into shader program
+        gl.glUniform1f(gl.glGetUniformLocation(ShaderID, "time"), elapsedTime);
+        // Write current textureID to shader program
+        gl.glUniform1i(gl.glGetUniformLocation(ShaderID, "textUnit"), TextureMgr.instance.getGLID("Mine"));
+        
 		// Enable vertex arrays: co-ordinates, normal and index.
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 		gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
@@ -121,7 +147,6 @@ public class MineSection {
     	gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
     	gl.glDisableClientState(GL2.GL_INDEX_ARRAY);
     	
-    	// Disable Shader
     	gl.glPopMatrix();
 	}
 	
@@ -132,18 +157,18 @@ public class MineSection {
 		for (int i = 0; i < 6; i++) {
 			double rad = (double) (i / 6.0 * 2 * Math.PI) ;
 			vertices[i*3] = (float) Math.cos(rad) * TOPFACE_RADIUS;
-			vertices[i*3+1] = (float) 0.1;
+			vertices[i*3+1] = (float) HEIGHT;
 			vertices[i*3+2] = (float) Math.sin(rad) * TOPFACE_RADIUS;
-			textcoor[i*2+0] = vertices[i*3];
-			textcoor[i*2+1] = vertices[i*3+1];
+			textcoor[i*2+0] = vertices[i*3] / TOPFACE_RADIUS * 1.0f;
+			textcoor[i*2+1] = vertices[i*3+2] / TOPFACE_RADIUS * 1.0f;
 		}
 		for (int i = 6; i < 12; i++) {
 			double rad = (double) (i / 6.0 * 2 * Math.PI);
 			vertices[i*3] = (float) Math.cos(rad) * MIDFACE_RADIUS;
 			vertices[i*3+1] = (float) 0.0;
 			vertices[i*3+2] = (float) Math.sin(rad) * MIDFACE_RADIUS;
-			textcoor[i*2+0] = vertices[i*3];
-			textcoor[i*2+1] = vertices[i*3+1];
+			textcoor[i*2+0] = vertices[i*3] / TOPFACE_RADIUS * 1.0f;
+			textcoor[i*2+1] = vertices[i*3+2] / TOPFACE_RADIUS * 1.0f;
 		}
 	}
 	

@@ -148,7 +148,7 @@ public class Game extends JFrame implements GLEventListener {
 		Texture cardboard = new Texture(gl, "res/cardboard.png");
 		TextureMgr.instance.add(cardboard, "Cardboard");
 		
-		Texture diamond = new Texture(gl, "res/diamond.png");
-		TextureMgr.instance.add(diamond, "Diamond");
+		Texture mine = new Texture(gl, "res/mine.png");
+		TextureMgr.instance.add(mine, "Mine");
 	}
 }

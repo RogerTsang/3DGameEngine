@@ -28,7 +28,7 @@ public class Terrain {
     private double[][] myAltitude;
     private List<Tree> myTrees;
     private List<Road> myRoads;
-    private List<Mine> myMine;
+    private List<Slime> mySlime;
     private float[] mySunlight;
     private double maxAltitude;
 
@@ -43,7 +43,7 @@ public class Terrain {
         myAltitude = new double[width][depth];
         myTrees = new ArrayList<Tree>();
         myRoads = new ArrayList<Road>();
-        myMine = new ArrayList<Mine>();
+        mySlime = new ArrayList<Slime>();
         mySunlight = new float[3];
         maxAltitude = 0;
     }
@@ -64,8 +64,8 @@ public class Terrain {
         return myRoads;
     }
     
-    public List<Mine> mines() {
-        return myMine;
+    public List<Slime> slimes() {
+        return mySlime;
     }
 
     public float[] getSunlight() {
@@ -243,10 +243,10 @@ public class Terrain {
      * @param x
      * @param z
      */
-    public void addMine(double x, double z) {
+    public void addSlime(double x, double z) {
     	double y = altitude(x, z);
-    	Mine mine = new Mine(x, y, z);
-        myMine.add(mine);
+    	Slime mine = new Slime(x, y, z);
+        mySlime.add(mine);
     }
 
 
