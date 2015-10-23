@@ -105,12 +105,13 @@ public class SlimeSection {
 		gl.glTranslated(posX, posY, posZ);
 		
     	// Texture
-    	TextureMgr.instance.activate(gl, "Mine");
+    	TextureMgr.instance.activate(gl, "Slime");
     	
     	// Setup Material
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, ambientCoeff, 0);
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeff, 0);
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
+    	gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
     	
     	// Setup Shader
     	gl.glUseProgram(ShaderID);
@@ -140,6 +141,7 @@ public class SlimeSection {
 		gl.glDrawElements(GL2.GL_QUADS, 32, GL2.GL_UNSIGNED_SHORT, 0);
     	
     	// Disable vertex arrays: co-ordinates, normal and index.
+		gl.glUseProgram(0);
     	gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
     	gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, 0);
     	gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);

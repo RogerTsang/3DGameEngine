@@ -60,6 +60,7 @@ public class Lights {
 			float[] ambientCoeff = { 0.5f, 0.5f, 0.5f, 1.0f };
 			float[] diffuseCoeff = { 0.7f, 0.7f, 0.7f, 1.0f };
 			float[] specularCoeff = { 0.7f, 0.7f, 0.3f, 1.0f };
+			TextureMgr.instance.deactivate(gl);
 			gl.glColor3f(1f, 0.5f, 0f);
 			gl.glTranslated(sun_pos[0], sun_pos[1], sun_pos[2]);
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, ambientCoeff, 0);

@@ -2,6 +2,7 @@ package ass2.spec;
 
 import java.util.ArrayList;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 public class TextureMgr {
@@ -36,6 +37,14 @@ public class TextureMgr {
 	public void activate(GL2 gl, String name) {
 		currentIndex = names.indexOf(name);
 		textures.get(currentIndex).activate(gl);
+	}
+	
+	/**
+	 * Deactivate current texture
+	 * @param gl
+	 */
+	public void deactivate(GL2 gl) {
+		gl.glBindTexture(GL.GL_TEXTURE_2D, 0);
 	}
 	
 	/**
