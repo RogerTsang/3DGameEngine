@@ -156,7 +156,7 @@ public class RoadSection {
 				
 				double[] currentPoint0 = {currPoint0X, currPoint0Y, currPoint0Z};
 				double[] currentPoint1 = {currPoint1X, currPoint1Y, currPoint1Z};
-				double[] currentNormal = MathUtil.getNormal(previousPoint, currentPoint1, currentPoint0);
+				double[] currentNormal = MathUtil.getNormal(previousPoint, currentPoint0, currentPoint1);
 				currentNormal = MathUtil.normalise(currentNormal);
 				
 				//Add the next two points to the quad strip
