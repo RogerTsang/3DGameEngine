@@ -1,9 +1,9 @@
 package ass2.spec;
 
 /**
- * COMMENT: Comment Tree 
+ * COMMENT: I like slime(s) but they don't like me 
  *
- * @author malcolmr
+ * @author Hanzhang Zeng
  */
 public class Slime {
 

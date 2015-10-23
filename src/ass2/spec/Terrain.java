@@ -29,6 +29,8 @@ public class Terrain {
     private List<Tree> myTrees;
     private List<Road> myRoads;
     private List<Slime> mySlime;
+    private List<Pond> myPond;
+  
     private float[] mySunlight;
     private double maxAltitude;
 
@@ -44,6 +46,7 @@ public class Terrain {
         myTrees = new ArrayList<Tree>();
         myRoads = new ArrayList<Road>();
         mySlime = new ArrayList<Slime>();
+        myPond = new ArrayList<Pond>();
         mySunlight = new float[3];
         maxAltitude = 0;
     }
@@ -66,6 +69,10 @@ public class Terrain {
     
     public List<Slime> slimes() {
         return mySlime;
+    }
+    
+    public List<Pond> ponds() {
+    	return myPond;
     }
 
     public float[] getSunlight() {
@@ -238,7 +245,8 @@ public class Terrain {
     }
     
     /**
-     * Add a diamond which is implemented in VBO 
+     * Add a slime which is 
+     * Implemented in VBO
      * 
      * @param x
      * @param z
@@ -249,5 +257,28 @@ public class Terrain {
         mySlime.add(mine);
     }
 
+    /**
+     * Add a pond which is 
+     * Implemented in VBO and moving shader
+     * 
+     * @param x1 Top left corner
+     * @param z1 Top left corner
+     * @param x2 Bottom right corner
+     * @param z2 Bottom right corner
+     */
+    public void addPond(double x1, double z1, double x2, double z2) {
+    	// Expand the pond edge coverage by 1
+    	x1 = (x1 >= 1) ? x1 - 1 : x1;
+    	z1 = (z1 >= 1) ? z1 - 1 : z1;
+    	x2 = (x2 + 1 <= mySize.getWidth()) ? x2 + 1 : x2;
+    	z2 = (z2 + 1 <= mySize.getHeight()) ? z2 + 1 : z2;
+    	double y1 = altitude(x1, z2);
+    	double y2 = altitude(x2, z1);
+    	double y = Math.min(y1, y2);
+    	double[] pos0 = {x1, y, z1};
+    	double[] pos1 = {x2, y, z2};
+    	Pond pond = new Pond(pos0, pos1);
+        myPond.add(pond);
+    }
 
 }

@@ -24,9 +24,9 @@ public class SlimeSection {
 	private static final float MIDFACE_RADIUS = 0.2f;
 	private static final float HEIGHT = 0.3f;
 	
-	private static final float[] ambientCoeff = { 0.4f, 0.3f, 0.8f, 1.0f };
-	private static final float[] diffuseCoeff = { 0.5f, 0.4f, 1f, 1.0f };
-	private static final float[] specularCoeff = { 0.4f, 0.4f, 0.8f, 1.0f };
+	private float[] ambientCoeff = new float[4];
+	private float[] diffuseCoeff = new float[4];
+	private float[] specularCoeff = new float[4];
 	
 	private static final String VERTEX_SHADER = "res/VertexTex.glsl";
 	private static final String FRAGMENT_SHADER = "res/FragmentTex.glsl";
@@ -57,24 +57,22 @@ public class SlimeSection {
 	private static int bufferIds[];
 	
 	private double posX, posY, posZ;
-	public SlimeSection(double[] pos) {
+	public SlimeSection(double[] pos, GL2 gl) {
 		posX = pos[0];
 		posY = pos[1];
 		posZ = pos[2];
 		vertices = new float[VERTICES_LENGTH];
 		normals = new float[NORMALS_LENGTH];
+		textcoor = new float[TEXTURE_LENGTH];	
 		bufferIds = new int[2];
-	}
-	
-	public SlimeSection() {
-		// For VBO initiation purpose
-	}
-	
-	public void init(GL2 gl) {
 		calculateV();
 		calculateN();
 		bufferInit();
-		
+		materialInit();
+		init(gl);
+	}
+	
+	public void init(GL2 gl) {
 		// VBO section
 		gl.glGenBuffers(2, bufferIds, 0);
 		// would use GL.GL_ELEMENT_ARRAY_BUFFER for indices
@@ -90,7 +88,7 @@ public class SlimeSection {
 		
 		// Shader section
 	   	 try {
-            ShaderID = Shader.initShaders(gl,VERTEX_SHADER,FRAGMENT_SHADER);
+            ShaderID = Shader.initShaders(gl, VERTEX_SHADER, FRAGMENT_SHADER);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +118,7 @@ public class SlimeSection {
         // Write current system time into shader program
         gl.glUniform1f(gl.glGetUniformLocation(ShaderID, "time"), elapsedTime);
         // Write current textureID to shader program
-        gl.glUniform1i(gl.glGetUniformLocation(ShaderID, "textUnit"), TextureMgr.instance.getGLID("Mine"));
+        gl.glUniform1i(gl.glGetUniformLocation(ShaderID, "textUnit"), TextureMgr.instance.getGLID("Slime"));
         
 		// Enable vertex arrays: co-ordinates, normal and index.
 		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
@@ -152,10 +150,11 @@ public class SlimeSection {
     	gl.glPopMatrix();
 	}
 	
-	public void calculateV() {
-		vertices = new float[VERTICES_LENGTH];
-		textcoor = new float[TEXTURE_LENGTH];
-		
+	/**
+	 * Calculate Vertices and texture coordinates
+	 */
+	private void calculateV() {
+	
 		for (int i = 0; i < 6; i++) {
 			double rad = (double) (i / 6.0 * 2 * Math.PI) ;
 			vertices[i*3] = (float) Math.cos(rad) * TOPFACE_RADIUS;
@@ -174,8 +173,10 @@ public class SlimeSection {
 		}
 	}
 	
-	public void calculateN() {
-		normals = new float[NORMALS_LENGTH];
+	/**
+	 * Calculate Normals
+	 */
+	private void calculateN() {
 		float[] p0 = new float[3];
 		float[] p1 = new float[3];
 		float[] p2 = new float[3];
@@ -207,10 +208,28 @@ public class SlimeSection {
 		}
 	}
 	
-	public void bufferInit() {
+	private void bufferInit() {
 		vertexBuffer = Buffers.newDirectFloatBuffer(vertices);
 		normalBuffer = Buffers.newDirectFloatBuffer(normals);
 		tecoorBuffer = Buffers.newDirectFloatBuffer(textcoor);
 		indexData = Buffers.newDirectShortBuffer(indexes);
+	}
+	
+	/**
+	 * Slime material(colour) randomisation
+	 */
+	private void materialInit() {
+		ambientCoeff[0] = (float) Math.random();
+		ambientCoeff[1] = (float) Math.random();
+		ambientCoeff[2] = (float) Math.random();
+		ambientCoeff[3] = 1.0f;
+		diffuseCoeff[0] = (float) Math.random();
+		diffuseCoeff[1] = (float) Math.random();
+		diffuseCoeff[2] = (float) Math.random();
+		diffuseCoeff[3] = 1.0f;
+		specularCoeff[0] = (float) Math.random();
+		specularCoeff[1] = (float) Math.random();
+		specularCoeff[2] = (float) Math.random();
+		specularCoeff[3] = 1.0f;
 	}
 }

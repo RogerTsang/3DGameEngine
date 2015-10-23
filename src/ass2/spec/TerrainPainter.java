@@ -11,6 +11,8 @@ public class TerrainPainter implements KeyListener {
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
 	private ArrayList<SlimeSection> slimeSections;
+	private ArrayList<PondSection> pondSections;
+	private Terrain map;
 	private double maxAl;
 	private int terrainWidth;
 	private int terrainHeight;
@@ -20,11 +22,11 @@ public class TerrainPainter implements KeyListener {
 		treeSections = new ArrayList<TreeSection>();
 		roadSections = new ArrayList<RoadSection>();
 		slimeSections = new ArrayList<SlimeSection>();
-		
+		pondSections = new ArrayList<PondSection>();
+		map = t;
 		maxAl = t.getMaxAltitude();
 		terrainWidth = (int) t.size().getWidth();
 		terrainHeight = (int) t.size().getHeight();		
-		read(t);
 	}
 	
 	public void draw(GL2 gl) {
@@ -40,14 +42,16 @@ public class TerrainPainter implements KeyListener {
 		for (SlimeSection currentSlime: slimeSections) {
 			currentSlime.draw(gl);
 		}
+		for (PondSection currentPond: pondSections) {
+			currentPond.draw(gl);
+		}
 	}
 	
 	public void init(GL2 gl) {
-		SlimeSection d = new SlimeSection();
-		d.init(gl);
+		read(map, gl);
 	}
 	
-	public void read(Terrain t) {
+	public void read(Terrain t, GL2 gl) {
 		int width = (int) t.size().getWidth();
 		int height = (int) t.size().getHeight();
 		// Calculate the each triangle position base on their (x,z) position
@@ -75,7 +79,11 @@ public class TerrainPainter implements KeyListener {
 		}
 		//Add a diamond into the game
 		for (Slime currentSlime: t.slimes()) {
-			slimeSections.add(new SlimeSection(currentSlime.getPosition()));
+			slimeSections.add(new SlimeSection(currentSlime.getPosition(), gl));
+		}
+		//Add a pond into the terrain
+		for (Pond currentSlime: t.ponds()) {
+			pondSections.add(new PondSection(currentSlime.getPosition(), gl));
 		}
 	}
 	

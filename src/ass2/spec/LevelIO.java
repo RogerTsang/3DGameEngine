@@ -86,6 +86,19 @@ public class LevelIO {
                 terrain.addSlime(x, z);
             }
         }
+        
+        if (jsonTerrain.has("ponds")) {
+            JSONArray jsonDiamonds = jsonTerrain.getJSONArray("ponds");
+            for (int i = 0; i < jsonDiamonds.length(); i++) {
+                JSONObject jsonDiamond = jsonDiamonds.getJSONObject(i);
+                double x1 = jsonDiamond.getDouble("tlx");
+                double z1 = jsonDiamond.getDouble("tlz");
+                double x2 = jsonDiamond.getDouble("brx");
+                double z2 = jsonDiamond.getDouble("brz");
+                terrain.addPond(x1, z1, x2, z2);
+            }
+        }
+        
         return terrain;
     }
 
