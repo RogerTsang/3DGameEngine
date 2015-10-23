@@ -8,14 +8,16 @@ import javax.media.opengl.GL2;
 public class TreeSection {
 	private double[] treeRootPosition;
 	private int LSystemIterations = 3;
+	private LSystem branchLSystem;
 	
 	private static final float[] diffuseCoeffientStump = {0.3f, 0.1f, 0.0f, 1.0f};
 	private static final float[] specularCoeffientStump = {0.5f, 0.5f, 0.5f, 1.0f};
 	private static final float[] diffuseCoeffientLeaves = {0.0f, 0.5f, 0.0f, 1.0f};
 	private static final float[] specularCoeffientLeaves = {0.5f, 0.5f, 0.5f, 1.0f};
 	
-	public TreeSection(double[] position) {
+	public TreeSection(double[] position, LSystem ls) {
 		treeRootPosition = position;
+		branchLSystem = ls;
 	}
 	
 	public void increaseIteration() {
@@ -42,7 +44,9 @@ public class TreeSection {
 		HashMap<Character, String> treeRules = new HashMap<Character, String>();
 		treeRules.put('B', "AM[TB]R[TB]R[TD]");
 		treeRules.put('D', "C[MUB]N[TB]R[TB]R[TB]");
-		LSystem branchLSystem = new LSystem(treeStart, treeRules);
+		//LSystem branchLSystem = new LSystem(treeStart, treeRules);
+		branchLSystem.addFirst(treeStart);
+		branchLSystem.addRules(treeRules);
 		String instructions = branchLSystem.getIteration(LSystemIterations);
 		
 		for (int i = 0; i < instructions.length(); i++) {

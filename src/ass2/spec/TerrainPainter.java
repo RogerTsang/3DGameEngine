@@ -16,6 +16,7 @@ public class TerrainPainter implements KeyListener {
 	private double maxAl;
 	private int terrainWidth;
 	private int terrainHeight;
+	private LSystem treeLSystem;
 	
 	public TerrainPainter(Terrain t) {
 		terrainSections = new ArrayList<TerrianSection>();
@@ -26,7 +27,9 @@ public class TerrainPainter implements KeyListener {
 		map = t;
 		maxAl = t.getMaxAltitude();
 		terrainWidth = (int) t.size().getWidth();
-		terrainHeight = (int) t.size().getHeight();		
+		terrainHeight = (int) t.size().getHeight();
+		//Initialise LSystem to increase performance, as it will not be initalised further in the draw function
+		treeLSystem = new LSystem();
 	}
 	
 	public void draw(GL2 gl) {
@@ -71,7 +74,7 @@ public class TerrainPainter implements KeyListener {
 		}
 		//Add reading the trees from terrain
 		for (Tree currentTree: t.trees()) {
-			treeSections.add(new TreeSection(currentTree.getPosition()));
+			treeSections.add(new TreeSection(currentTree.getPosition(), treeLSystem));
 		}
 		//Add reading the roads from terrain
 		for (Road currentRoad: t.roads()) {
@@ -101,6 +104,11 @@ public class TerrainPainter implements KeyListener {
 		case KeyEvent.VK_Z:
 			for (TreeSection ts: treeSections) {
 				ts.decreaseIteration();
+			}
+			break;
+		case KeyEvent.VK_C:
+			for (RoadSection rs: roadSections) {
+				rs.changeExtrusion();
 			}
 		}
 	}
