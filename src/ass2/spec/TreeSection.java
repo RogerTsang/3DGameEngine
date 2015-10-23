@@ -1,11 +1,13 @@
 package ass2.spec;
 
+
 import java.util.HashMap;
 
 import javax.media.opengl.GL2;
 
 public class TreeSection {
 	private double[] treeRootPosition;
+	private int LSystemIterations = 3;
 	
 	private static final float[] diffuseCoeffientStump = {0.3f, 0.1f, 0.0f, 1.0f};
 	private static final float[] specularCoeffientStump = {0.5f, 0.5f, 0.5f, 1.0f};
@@ -16,6 +18,18 @@ public class TreeSection {
 		treeRootPosition = position;
 	}
 	
+	public void increaseIteration() {
+		if (LSystemIterations < Integer.MAX_VALUE) {
+			LSystemIterations++;
+		}
+	}
+	
+	public void decreaseIteration() {
+		if (LSystemIterations > 0) {
+			LSystemIterations--;
+		}
+	}
+	
 	//Draws the tree
 	public void draw(GL2 gl) {
 		gl.glPushMatrix();
@@ -24,7 +38,6 @@ public class TreeSection {
 				
 		//Generates a tree using L system
 		
-		final int LSystemIterations = 3;
 		String treeStart = "B";
 		HashMap<Character, String> treeRules = new HashMap<Character, String>();
 		treeRules.put('B', "AM[TB]R[TB]R[TD]");
@@ -155,7 +168,6 @@ public class TreeSection {
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeffientLeaves, 0);
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeffientLeaves, 0);
 		for (int i = 0; i < 3; i++) {
-			gl.glTranslated(0,-i*0.5,0);
 			gl.glRotated(-20, 0, 0, 1);
 			
 			//All normals for each leaf is the same, as the coordinate frame is being modified such that n = (1,0,0), facing out from the x axis
@@ -200,6 +212,9 @@ public class TreeSection {
 				gl.glRotated(20, 0, 0, 1);
 				j++;
 			}
+			
+			//Move the coordinate frame down the trunk by 0.4 to draw the next layer of leaves
+			gl.glTranslated(0,-0.4,0);
 		}
 		
 		gl.glPopMatrix();

@@ -1,11 +1,12 @@
 package ass2.spec;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.media.opengl.GL2;
 
-public class TerrainPainter {
+
+public class TerrainPainter implements KeyListener {
 	private ArrayList<TerrianSection> terrainSections;
 	private ArrayList<TreeSection> treeSections;
 	private ArrayList<RoadSection> roadSections;
@@ -77,4 +78,27 @@ public class TerrainPainter {
 			slimeSections.add(new SlimeSection(currentSlime.getPosition()));
 		}
 	}
+	
+	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	public void keyReleased(KeyEvent e) {
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_X:
+			for (TreeSection ts: treeSections) {
+				ts.increaseIteration();
+			}
+			break;
+		case KeyEvent.VK_Z:
+			for (TreeSection ts: treeSections) {
+				ts.decreaseIteration();
+			}
+		}
+	}
+
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
 }
