@@ -51,8 +51,9 @@ public class Game extends JFrame implements GLEventListener {
           GLJPanel panel = new GLJPanel();
           panel.addGLEventListener(this);
           
-          // Add Keyboard Event Listener
+          // Add Keyboard Event Listener to camera and terrain painter
           panel.addKeyListener(myCamera);
+          panel.addKeyListener(myTerrainPainter);
  
           // Add an animator to call 'display' at 60fps        
           FPSAnimator animator = new FPSAnimator(60);
