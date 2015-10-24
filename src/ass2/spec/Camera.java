@@ -20,7 +20,7 @@ public class Camera implements KeyListener {
 	
 	private static final double NEAR = 0.1;
 	private static final double FAR = 10;
-	private static final double SPEED = 0.1;
+	private static final double SPEED = 0.06;
 	private static final double CAMERA_HEIGHT = 1;
 	private static final double FPSCAMERA_OFFSET_SCALE = 10;
 	
@@ -164,6 +164,25 @@ public class Camera implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		keys[e.getKeyCode()] = true;
+        if (keys[KeyEvent.VK_R]) {
+			if (flightMode) {
+				System.out.println(" FlightMode Disabled ");
+				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
+			} else {
+				System.out.println(" FlightMode Enabled ");
+				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT * 3;
+			}
+			flightMode = !flightMode;
+		}
+        
+        if (keys[KeyEvent.VK_F]) {
+        	if (firstPerson) {
+        		firstPerson = false;
+        	} else {
+        		firstPerson = true;
+        	}
+        }
+        
 	}
 	
 	@Override
@@ -213,29 +232,21 @@ public class Camera implements KeyListener {
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
         }
-        	
-        if (keys[KeyEvent.VK_F]) {
-        	if (firstPerson) {
-        		firstPerson = false;
-        	} else {
-        		firstPerson = true;
-        	}
-        }
 
         if (keys[KeyEvent.VK_LEFT]) {
-        	rotateHorizontal(5);
+        	rotateHorizontal(2);
         }
         
         if (keys[KeyEvent.VK_RIGHT]) {
-        	rotateHorizontal(-5);
+        	rotateHorizontal(-2);
         }
         
         if (keys[KeyEvent.VK_UP]) {
-        	rotateVertical(5);
+        	rotateVertical(2);
         }
         	
         if (keys[KeyEvent.VK_DOWN]) {
-        	rotateVertical(-5);
+        	rotateVertical(-2);
         }
             
         if (keys[KeyEvent.VK_SPACE]) {
@@ -249,17 +260,6 @@ public class Camera implements KeyListener {
         		positionY -= 0.1;
         	}
         }
-        	
-        if (keys[KeyEvent.VK_R]) {
-			if (flightMode) {
-				System.out.println(" FlightMode Disabled ");
-				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
-			} else {
-				System.out.println(" FlightMode Enabled ");
-				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT * 3;
-			}
-			flightMode = !flightMode;
-		}
 		
 		updateStep();
 		updateLookAt();
