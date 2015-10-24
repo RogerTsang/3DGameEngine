@@ -1,3 +1,14 @@
+Written by
+Roger Tsang z349047
+Desmond Cheang z5017008
+
+Github:
+https://github.com/RogerTsang/3DGameEngine
+
+Test Files
+Test1.json
+Test2.json
+
 Key bindings for Game
 
 Key			Action
