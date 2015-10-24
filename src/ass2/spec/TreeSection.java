@@ -12,8 +12,8 @@ public class TreeSection {
 	
 	private static final float[] diffuseCoeffientStump = {0.3f, 0.1f, 0.0f, 1.0f};
 	private static final float[] specularCoeffientStump = {0.5f, 0.5f, 0.5f, 1.0f};
-	private static final float[] diffuseCoeffientLeaves = {0.0f, 0.5f, 0.0f, 1.0f};
-	private static final float[] specularCoeffientLeaves = {0.5f, 0.5f, 0.5f, 1.0f};
+	private static final float[] diffuseCoeffientLeaves = {0.0f, 0.5f, 0.0f, 0.5f};
+	private static final float[] specularCoeffientLeaves = {0.5f, 0.5f, 0.5f, 0.7f};
 	
 	public TreeSection(double[] position, LSystem ls) {
 		treeRootPosition = position;
