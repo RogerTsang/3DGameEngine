@@ -19,7 +19,7 @@ import javax.media.opengl.glu.GLU;
 public class Camera implements KeyListener {
 	
 	private static final double NEAR = 0.1;
-	private static final double FAR = 10;
+	private static double FAR;
 	private static final double SPEED = 0.06;
 	private static final double CAMERA_HEIGHT = 1;
 	private static final double FPSCAMERA_OFFSET_SCALE = 10;
@@ -44,6 +44,12 @@ public class Camera implements KeyListener {
 		map = t;
 		myAvatar = new Avatar();
 		
+		// Rendering Distance
+		double w = t.size().getWidth();
+		double h = t.size().getHeight();
+		FAR = Math.sqrt(w*w+h*h);
+		
+		// Calculate eye position
 		double eye[] = t.getCentre();
 		positionX = eye[0];
 		positionY = eye[1] + CAMERA_HEIGHT;
