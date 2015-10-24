@@ -7,7 +7,7 @@ public class TerrianSection {
 	private double c0, c1, c2; // Altitude Test
 	private double[] normal; // So far, we use face normals
 
-	private static final float[] diffuseCoeff = { 0.2f, 0.6f, 0.0f, 1.0f };
+	private static final float[] diffuseCoeff = { 0.2f, 0.6f, 0.3f, 1.0f };
 	private static final float[] specularCoeff = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	public TerrianSection(double[] v0, double[] v1, double[] v2, double h0, double h1, double h2, double maxAl) {

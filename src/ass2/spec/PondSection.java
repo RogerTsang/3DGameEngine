@@ -12,10 +12,12 @@ public class PondSection {
 	
 	private static final int SECTIONS = 4;
 	private static final float DEPTH = 0.2f;
+	private static final float HEIGHT = 1f;
+	private static final float TRANSPARENCY = 0.5f;
 	
-	private static final float[] ambientCoeff = { 0.4f, 0.3f, 0.8f, 1.0f };
-	private static final float[] diffuseCoeff = { 0.5f, 0.4f, 0.5f, 1.0f };
-	private static final float[] specularCoeff = { 0.8f, 0.7f, 0.8f, 1.0f };
+	private static final float[] ambientCoeff = { 1f, 1f, 1f, 1.0f };
+	private static final float[] diffuseCoeff = { 0.6f, 0.56f, 0.6f, 1.0f };
+	private static final float[] specularCoeff = { 0.46f, 0.74f, 0.9f, 1.0f };
 	
 	private static final String VERTEX_SHADER = "res/WaterVTex.glsl";
 	private static final String FRAGMENT_SHADER = "res/WaterFTex.glsl";
@@ -87,7 +89,7 @@ public class PondSection {
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, ambientCoeff, 0);
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, specularCoeff, 0);
     	gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diffuseCoeff, 0);
-    	gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
+
     	
     	// Setup Shader
     	gl.glUseProgram(ShaderID);
@@ -95,6 +97,8 @@ public class PondSection {
         float elapsedTime = currentTime - startTime;
         // Write current system time into shader program
         gl.glUniform1f(gl.glGetUniformLocation(ShaderID, "time"), elapsedTime);
+        gl.glUniform1f(gl.glGetUniformLocation(ShaderID, "height"), HEIGHT);
+        gl.glUniform1f(gl.glGetUniformLocation(ShaderID, "transparency"), TRANSPARENCY);
         // Write current textureID to shader program
         gl.glUniform1i(gl.glGetUniformLocation(ShaderID, "textUnit"), TextureMgr.instance.getGLID("Water"));
         

@@ -2,8 +2,6 @@
 
 /* Acknowledge:
 	The code of vertex, normal, animating calculation referenced week6 course package
-	SimpleVertex.glsl
-	SimpleFragment.glsl
 	AnimatedVertex.glsl
 	PhongVertex.glsl
 	PhongFragment.glsl
@@ -12,7 +10,7 @@
 out vec2 texCoordV;
 out vec3 N; 
 out vec3 v;
-out vec4 transparency;
+out float jumpHeight;
 uniform float time; /* in milliseconds */
 
 void main(void) {
@@ -25,8 +23,7 @@ void main(void) {
    vec4 t = gl_Vertex;
    // Setup slime's height
    t.y = 0.05*sin(0.01*(time)) + gl_Vertex.y;
-   float jumpHeight = (t.y - gl_Vertex.y) * 10 + 0.5;
-   transparency = vec4(1.0, 1.0, 1.0, 1 - jumpHeight*0.8);
+   jumpHeight = (t.y - gl_Vertex.y) * 10 + 0.5;
    
    // Setup slime's waistline
    t.x = 0.5*cos(0.01*(time)+0.8) * sqrt(t.x*t.x+t.z*t.z) * t.x + gl_Vertex.x;

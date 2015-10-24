@@ -3,19 +3,15 @@ package ass2.spec;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLJPanel;
-import javax.media.opengl.glu.GLU;
 import javax.swing.JFrame;
 
 import com.jogamp.opengl.util.FPSAnimator;
-
-import java.util.ArrayList;
 
 /**
  * COMMENT: Comment Game 
@@ -117,6 +113,10 @@ public class Game extends JFrame implements GLEventListener {
 		gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glEnable(GL2.GL_BLEND);
 		
+		// Enable Cull Face
+		gl.glEnable(GL2.GL_CULL_FACE);
+		gl.glCullFace(GL2.GL_BACK);
+		
 		// Initialise textures
 		textureInit(gl);
 		
@@ -125,6 +125,7 @@ public class Game extends JFrame implements GLEventListener {
 		
 		// Light0: Sun
 		myLights.init(gl);
+		
 	}
 
 	@Override

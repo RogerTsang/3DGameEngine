@@ -164,15 +164,4 @@ public class LevelIO {
 
     }
     
-    /**
-     * For testing.
-     * 
-     * @param args
-     * @throws IOException 
-     */
-    public static void main(String[] args) throws IOException {
-        Terrain terrain = LevelIO.load(new File(args[0]));
-        LevelIO.save(terrain, new File(args[1]));
-    }
-
 }
