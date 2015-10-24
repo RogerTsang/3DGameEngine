@@ -166,7 +166,6 @@ public class RoadSection {
 				gl.glTexCoord2d((double)i*length1*lengthFactor/(width*lengthIncrements), (double) j/widthIncrements);
 				gl.glVertex3d(currPoint0X, currPoint0Y, currPoint0Z);
 				
-				
 				previousPoint[0] = currPoint0X;
 				previousPoint[1] = currPoint0Y;
 				previousPoint[2] = currPoint0Z;
