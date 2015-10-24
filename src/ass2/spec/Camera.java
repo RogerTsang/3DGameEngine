@@ -34,6 +34,8 @@ public class Camera implements KeyListener {
 	private double lookatX, lookatY, lookatZ;
 	private double rotateY, VAngle;
 	
+	private boolean keys[];
+	
 	/**
 	 * Set up background colour
 	 * @param r
@@ -55,6 +57,11 @@ public class Camera implements KeyListener {
 		flightMode = false;
 		rotateY = 0;
 		VAngle = 0; //Vertical Angle
+		
+		keys = new boolean[256];
+		for (int i = 0; i < 256; i++) {
+			keys[i] = false;
+		}
 	}
 	
 	public double[] getEyePos() {
@@ -121,6 +128,8 @@ public class Camera implements KeyListener {
 	}
 
 	public void setView(GL2 gl) {
+		readKey();
+		
 		// clear the window
 		gl.glClearColor(0,0,0.2f,1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
@@ -154,8 +163,22 @@ public class Camera implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-        case KeyEvent.VK_W:
+		keys[e.getKeyCode()] = true;
+	}
+	
+	@Override
+	public void keyReleased(KeyEvent e) {
+		keys[e.getKeyCode()] = false;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	private void readKey() {
+        if (keys[KeyEvent.VK_W]) {
             positionX += stepX;
             positionZ += stepZ;
             if (flightMode) {            	
@@ -163,9 +186,9 @@ public class Camera implements KeyListener {
             } else {
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
-            break;
-
-        case KeyEvent.VK_S:
+        }
+        
+        if (keys[KeyEvent.VK_S]) {
         	positionX -= stepX;
             positionZ -= stepZ;
             if (flightMode) {            	
@@ -173,63 +196,61 @@ public class Camera implements KeyListener {
             } else {
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
-            break;
+        }
         
-        case KeyEvent.VK_A:
-        	
+        if (keys[KeyEvent.VK_A]) {
         	positionX += leftX;
         	positionZ += leftZ;
         	if (!flightMode) {            	
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
-        	break;
+        }
         	
-        case KeyEvent.VK_D:
-        	
+        if (keys[KeyEvent.VK_D]) {
         	positionX -= leftX;
         	positionZ -= leftZ;
         	if (!flightMode) {            	
             	positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
             }
-        	break;
+        }
         	
-        case KeyEvent.VK_F:
+        if (keys[KeyEvent.VK_F]) {
         	if (firstPerson) {
         		firstPerson = false;
         	} else {
         		firstPerson = true;
         	}
-        	break;
+        }
 
-        case KeyEvent.VK_LEFT:
+        if (keys[KeyEvent.VK_LEFT]) {
         	rotateHorizontal(5);
-            break;
+        }
         
-        case KeyEvent.VK_RIGHT:
+        if (keys[KeyEvent.VK_RIGHT]) {
         	rotateHorizontal(-5);
-            break;
-            
-        case KeyEvent.VK_UP:
+        }
+        
+        if (keys[KeyEvent.VK_UP]) {
         	rotateVertical(5);
-        	break;
+        }
         	
-        case KeyEvent.VK_DOWN:
+        if (keys[KeyEvent.VK_DOWN]) {
         	rotateVertical(-5);
-        	break;
+        }
             
-        case KeyEvent.VK_SPACE:
+        if (keys[KeyEvent.VK_SPACE]) {
         	if (flightMode) {
         		positionY += 0.1;
         	}
-        	break;
+        }
         	
-        case KeyEvent.VK_CONTROL:
+        if (keys[KeyEvent.VK_CONTROL]) {
         	if (flightMode) {
         		positionY -= 0.1;
         	}
-        	break;
+        }
         	
-		case KeyEvent.VK_R: 
+        if (keys[KeyEvent.VK_R]) {
 			if (flightMode) {
 				System.out.println(" FlightMode Disabled ");
 				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT;
@@ -238,22 +259,9 @@ public class Camera implements KeyListener {
 				positionY = map.altitude(positionX, positionZ) + CAMERA_HEIGHT * 3;
 			}
 			flightMode = !flightMode;
-	    	break;
 		}
 		
 		updateStep();
 		updateLookAt();
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
