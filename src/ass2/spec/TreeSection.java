@@ -103,7 +103,7 @@ public class TreeSection {
 	}
 	
 	private void drawCylinder(GL2 gl, double height) {
-		final int numVertices = 32;
+		final int numVertices = 16;
 		final double radius = 0.1;
 		double increment = 2*Math.PI/numVertices;
 		double[] currentNormal = new double[3];
@@ -144,7 +144,7 @@ public class TreeSection {
 	}
 	
 	private void drawCircle(GL2 gl, double height) {
-		final int numVertices = 32;
+		final int numVertices = 16;
 		final double radius = 0.1;
 		double increment = 2*Math.PI/numVertices;
 		double[] currentNormal = new double[3];

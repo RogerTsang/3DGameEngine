@@ -161,10 +161,11 @@ public class RoadSection {
 				
 				//Add the next two points to the quad strip
 				gl.glNormal3dv(currentNormal, 0);
-				gl.glTexCoord2d((double)i*length1*lengthFactor/(width*lengthIncrements), (double) j/widthIncrements);
-				gl.glVertex3d(currPoint0X, currPoint0Y, currPoint0Z);
 				gl.glTexCoord2d(((double)i+1)*length1*lengthFactor/(width*lengthIncrements), (double) j/widthIncrements);
 				gl.glVertex3d(currPoint1X, currPoint1Y, currPoint1Z);
+				gl.glTexCoord2d((double)i*length1*lengthFactor/(width*lengthIncrements), (double) j/widthIncrements);
+				gl.glVertex3d(currPoint0X, currPoint0Y, currPoint0Z);
+				
 				
 				previousPoint[0] = currPoint0X;
 				previousPoint[1] = currPoint0Y;
